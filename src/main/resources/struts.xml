@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+
+    <constant name="struts.devMode" value="true"/>
+
+    <package name="default" namespace="/" extends="struts-default">
+        <!-- Root action to redirect to /dispatch-register -->
+        <action name="">
+            <result type="redirect">dispatch-register</result>
+        </action>
+
+        <action name="dispatch-register">
+            <result>/WEB-INF/views/dispatch-register.jsp</result>
+        </action>
+
+        <action name="dispatch-register-submit" class="com.ddr.actions.DispatchRegisterSubmitAction" method="submit">
+<!--            <result name="success">/WEB-INF/views/dispatch-register.jsp</result>-->
+<!--            <result name="error">/WEB-INF/views/dispatch-register.jsp</result>-->
+        </action>
+    </package>
+
+    <package name="json" namespace="/" extends="json-default">
+        <action name="get-data" class="com.ddr.actions.DispatchRegisterFormAction">
+            <result name="success" type="json">
+                <param name="root">result</param>
+            </result>
+            <result name="error" type="json">
+                <param name="root">result</param>
+            </result>
+        </action>
+    </package>
+</struts>

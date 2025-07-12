@@ -1,0 +1,177 @@
+:root {
+	--c-primary: #3b6283;
+	--c-primary-dark: #10273b;
+	--c-white: #fff;
+	--c-error-txt: #e93716;
+	--c-input-bg: #F8F8FB;
+	--c-input-border: #DADAF2;
+	--c-btn-bg: #40a6ef;
+}
+
+.form-section {
+    /*border: 1px solid var(--c-primary);
+    padding: 1.25rem;
+    max-width: 1000px;*/
+    margin: 1.25rem;
+}
+
+#dispRegForm fieldset {
+    display: grid;
+    grid-template-columns:auto auto auto auto;
+    grid-gap:1rem;
+    padding: 1rem;
+    color: var(--c-primary);
+    max-width: 1000px;
+    border: 1px solid;
+}
+
+.form-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+#dispRegForm label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--c-primary);
+}
+
+.required::after {
+    content: "* ";
+    color: red;
+}
+
+select:focus {
+    background-color: #ffd4d4;
+    border: 1px solid #ffb8b8;
+}
+
+select, input {
+    max-width: 12.5rem;
+    padding: 0;
+    font-size: 0.8rem;
+}
+
+select:focus, input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.date {
+    max-width: 12.162rem;
+    padding-left: 0.2rem;
+}
+
+.form-actions {
+    grid-column-start: 4;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: var(--c-btn-bg);
+    color: white;
+    border: none;
+    transition: 0.3s ease;
+}
+
+.btn:hover {
+    background-color: var(--c-primary);
+}
+
+.btn-enabled {
+	background: var(--c-primary);
+    color: var(--c-white);
+    cursor: pointer;
+}
+
+.btn-disabled {
+	background: rgba(239, 239, 239, 0.3);
+    color: rgba(16, 16, 16, 0.3);
+    cursor: default;
+}
+
+.btn-disabled:hover {
+    background: rgba(239, 239, 239, 0.3);
+}
+
+/*-- Date Picker --*/
+#ui-datepicker-div .ui-widget-header {
+    background: var(--c-btn-bg);
+}
+#ui-datepicker-div .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+    border: 1px solid var(--c-primary);
+    background: var(--c-btn-bg);
+    font-weight: normal;
+    color: #ffffff;
+}
+
+#ui-datepicker-div {
+    font-size: 0.9rem;
+}
+
+
+
+/***********************/
+/** Responsive Styles **/
+/***********************/
+/* Medium screens (tablets, > 30rem = 480px and ≤ 48rem = 768px) */
+@media (min-width: 30.01rem) and (max-width: 48rem) {
+    #dispRegForm fieldset {
+        grid-template-columns: auto auto;
+        justify-content: space-evenly;
+    }
+
+    .form-actions {
+        grid-column-start: 2;
+        justify-self: start;
+    }
+
+    .form-section {
+        margin: 1rem;
+    }
+
+}
+
+/* Small screens (phones, ≤ 30rem = 480px) */
+@media (max-width: 30rem) {
+    #dispRegForm fieldset {
+        grid-template-columns: auto;
+        justify-content: space-evenly;
+        grid-gap: 0.75rem;
+    }
+
+    #dispRegForm fieldset label {
+        margin-bottom: 0;
+    }
+
+    .form-actions {
+        grid-column-start: 1;
+        justify-self: start;
+        margin-top: 0.5rem;
+    }
+
+    .form-section {
+        margin: 0.5rem;
+        padding: 1rem;
+    }
+
+    select, input {
+        padding: 0.1rem;
+    }
+
+    .date {
+        max-width: 100%;
+    }
+
+    .btn {
+        text-align: center;
+    }
+
+    #ui-datepicker-div {
+        font-size: 0.8rem;
+    }
+}
