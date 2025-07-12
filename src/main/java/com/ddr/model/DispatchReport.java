@@ -206,9 +206,8 @@ public class DispatchReport {
                 "DispatchRegister{dspTrnNo='%s', dspDt=%s, custName='%s', destination='%s', transporter='%s', " +
                         "goodsValue=%.2f, invNo='%s', lrNum='%s', driverName='%s', lorryNo='%s', lrDate=%s, delayDays=%d, " +
                         "noOfCases=%d, formNum='%s', cFormDate=%s, cFormValue=%d, podDate=%s, podNum=%d, podReason='%s'}",
-                dspTrnNo, dspDt, custName, destination, transporter,
-                goodsValue, invNo, lrNum, driverName, lorryNo, lrDate, delayDays,
-                noOfCases, formNum, cFormDate, cFormValue, podDate, podNum, podReason
+                dspTrnNo, dspDt, custName, destination, transporter, goodsValue, invNo, lrNum, driverName, lorryNo, lrDate,
+                delayDays, noOfCases, formNum, cFormDate, cFormValue, podDate, podNum, podReason
         );
     }
 

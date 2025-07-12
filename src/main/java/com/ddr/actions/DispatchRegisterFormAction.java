@@ -30,7 +30,6 @@ public class DispatchRegisterFormAction extends ActionSupport {
         logger.debug("type :: [{}]", this.type);
         this.type = (this.type == null || this.type.trim().isEmpty()) ? "" : this.type.trim();
 
-
         switch (type) {
             case "branchList":
                 this.result = service.getBranchList();

@@ -24,7 +24,7 @@ public class DispatchRegisterExcelService {
 
     private static final Logger logger = LoggerUtil.getLogger(DispatchRegisterExcelService.class);
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         //DownloadService service = new DownloadService();
         String filePath = "D:\\RAHUL\\TASK\\Dispatch details report summary\\DispatchDetailsReport\\module-resource\\Dispatch-Register-Summary.xlsx";
         DispatchRegisterDTO dto = new DispatchRegisterDTO();
@@ -39,7 +39,7 @@ public class DispatchRegisterExcelService {
 
         DispatchRegisterExcelService service = new DispatchRegisterExcelService();
         service.updateFileData(dto);
-    }
+    }*/
 
     public String updateFileData(DispatchRegisterDTO registerDTO) {
         logger.debug("updating excel file..");
@@ -71,7 +71,7 @@ public class DispatchRegisterExcelService {
             // after successful update return file path for downloading
             return filePath;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception occurred in updateFileData :: ", e);
         }
         return "";
     }
@@ -227,7 +227,7 @@ public class DispatchRegisterExcelService {
             FileOutputStream fos = new FileOutputStream(file);
             workbook.write(fos);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception occurred in addDispatchDataInFile :: ", e);
         }
     }
 

@@ -32,8 +32,7 @@ public class DispatchRegisterFormService {
             return result;
 
         } catch (RuntimeException e) {
-            logger.error("Exception occurred in getBranchList >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred in getBranchList >> ", e);
             result.put("success", false);
             result.put("message", e.getMessage());
             return result;
@@ -58,8 +57,7 @@ public class DispatchRegisterFormService {
             return result;
 
         } catch (RuntimeException e) {
-            logger.error("Exception occurred in getStockPointList >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred in getStockPointList >> ", e);
             result.put("success", false);
             result.put("message", e.getMessage());
             return result;
@@ -91,8 +89,7 @@ public class DispatchRegisterFormService {
             return result;
 
         } catch (RuntimeException e) {
-            logger.error("Exception occurred in getStockPointByLocId >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred in getStockPointByLocId >> ", e);
             result.put("success", false);
             result.put("message", e.getMessage());
             return result;
@@ -117,8 +114,7 @@ public class DispatchRegisterFormService {
             return result;
 
         } catch (RuntimeException e) {
-            logger.error("Exception occurred in getDivisionList >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred in getDivisionList >> ", e);
             result.put("success", false);
             result.put("message", e.getMessage());
             return result;
@@ -149,8 +145,7 @@ public class DispatchRegisterFormService {
             return result;
 
         } catch (RuntimeException e) {
-            logger.error("Exception occurred in getCustomerListByLocId >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred in getCustomerListByLocId >> ", e);
             result.put("success", false);
             result.put("message", e.getMessage());
             return result;
@@ -175,8 +170,7 @@ public class DispatchRegisterFormService {
             return result;
 
         } catch (RuntimeException e) {
-            logger.error("Exception occurred in getFinancialYearList >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred in getFinancialYearList >> ", e);
             result.put("success", false);
             result.put("message", e.getMessage());
             return result;
@@ -206,8 +200,7 @@ public class DispatchRegisterFormService {
             return result;
 
         } catch (RuntimeException e) {
-            logger.error("Exception occurred in getFinancialYearDates >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred in getFinancialYearDates >> ", e);
             result.put("success", false);
             result.put("message", e.getMessage());
             return result;

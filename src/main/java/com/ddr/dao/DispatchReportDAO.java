@@ -88,7 +88,8 @@ public class DispatchReportDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Exception occurred :: >> ", e);
+            throw new RuntimeException(e);
         }
         return list;
     }
@@ -109,8 +110,7 @@ public class DispatchReportDAO {
             }
 
         } catch (Exception e) {
-            logger.error("Exception occurred while getting Location Name  >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred while getting Location Name  >> ", e);
             throw new RuntimeException(e);
         }
         return "";
@@ -132,8 +132,7 @@ public class DispatchReportDAO {
             }
 
         } catch (Exception e) {
-            logger.error("Exception occurred while getting Customer Name >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred while getting Customer Name >> ", e);
             throw new RuntimeException(e);
         }
         return "";

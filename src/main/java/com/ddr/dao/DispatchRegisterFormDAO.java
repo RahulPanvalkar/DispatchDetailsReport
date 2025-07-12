@@ -41,8 +41,7 @@ public class DispatchRegisterFormDAO {
             }
 
         } catch (Exception e) {
-            logger.error("Exception occurred while getting Location Data >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred while getting Location Data >> ", e);
             throw new RuntimeException(e);
         }
         return result;
@@ -71,8 +70,7 @@ public class DispatchRegisterFormDAO {
             }
 
         } catch (Exception e) {
-            logger.error("Exception occurred while getting Stock Point Data >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred while getting Stock Point Data >> ", e);
             throw new RuntimeException(e);
         }
         return result;
@@ -101,8 +99,7 @@ public class DispatchRegisterFormDAO {
             }
 
         } catch (Exception e) {
-            logger.error("Exception occurred while getting Stock Point >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred while getting Stock Point >> ", e);
             throw new RuntimeException(e);
         }
         return map;
@@ -131,8 +128,7 @@ public class DispatchRegisterFormDAO {
             }
 
         } catch (Exception e) {
-            logger.error("Exception occurred while getting Division Data >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred while getting Division Data >> ", e);
             throw new RuntimeException(e);
         }
         return result;
@@ -166,8 +162,7 @@ public class DispatchRegisterFormDAO {
             }
 
         } catch (Exception e) {
-            logger.error("Exception occurred while getting Customer Data >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred while getting Customer Data >> ", e);
             throw new RuntimeException(e);
         }
         return result;
@@ -200,8 +195,7 @@ public class DispatchRegisterFormDAO {
             }
 
         } catch (Exception e) {
-            logger.error("Exception occurred while getting Financial Year Data >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred while getting Financial Year Data >> ", e);
             throw new RuntimeException(e);
         }
         return result;
@@ -236,8 +230,7 @@ public class DispatchRegisterFormDAO {
             }
 
         } catch (Exception e) {
-            logger.error("Exception occurred while getting Financial Year Dates >> [{}]", e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception occurred while getting Financial Year Dates >> ", e);
             throw new RuntimeException(e);
         }
         return map;
