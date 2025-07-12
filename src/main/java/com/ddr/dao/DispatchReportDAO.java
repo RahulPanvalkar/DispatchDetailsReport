@@ -53,7 +53,7 @@ public class DispatchReportDAO {
             // Execute the call
             stmt.execute();
 
-            logger.debug("Query : [call DISPATCH_REGISTER({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})}]",
+            logger.debug("Query : [{}], Param : [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]", query,
                     OracleTypes.CURSOR, "CURRENT", dto.getFinancialYear(), "SNK", dto.getBranch(), dto.getStartDate(),
                     dto.getEndDate(), dto.getDivision(), dto.getCustomer(), dto.getReportType(), dto.getStockPoint());
 

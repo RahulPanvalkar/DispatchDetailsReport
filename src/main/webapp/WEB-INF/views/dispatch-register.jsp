@@ -48,7 +48,7 @@
                     </select>
 
                     <!-- Customers -->
-                    <label for="customer" class="required">Customers</label>
+                    <label for="customer" class="required">Customer</label>
                     <select name="dto.customer" id="customer">
                         <option value="">All</option>
                     </select>

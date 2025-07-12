@@ -69,12 +69,20 @@ $(document).ready(function() {
         let branchId = $(this).val();
         console.log("branchId >> ", branchId);
         if(!branchId) {
-            $('#stockPoint').empty();
             // set stock point
+            $('#stockPoint').empty();
             $('#stockPoint').append(
                 $('<option>', {
                     value: "",
                     text: "Select"
+                })
+            );
+            //set customer
+            $('#customer').empty();
+            $('#customer').append(
+                $('<option>', {
+                    value: "",
+                    text: "All"
                 })
             );
             makeAjaxRequest("get-data?type=stockPointList", handleStockPointData);
