@@ -14,9 +14,9 @@ public class DBConnectionManager {
 				return connection;
 			}
 
-			Class.forName("oracle.jdbc.OracleDriver");
+			Class.forName(Constants.DB_DRIVER);
 
-			connection = DriverManager.getConnection(Constants.URL, Constants.USERNAME, Constants.PASSWORD);
+			connection = DriverManager.getConnection(Constants.DB_URL, Constants.DB_USERNAME, Constants.DB_PASSWORD);
 
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();

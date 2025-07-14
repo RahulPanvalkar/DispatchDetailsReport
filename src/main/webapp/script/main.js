@@ -81,7 +81,7 @@ $(document).ready(function() {
             $('#customer').empty();
             $('#customer').append(
                 $('<option>', {
-                    value: "",
+                    value: "0",
                     text: "All"
                 })
             );
@@ -123,14 +123,16 @@ $(document).ready(function() {
         let customerList = response.data;
         console.log("json customerList >> ", stockPoint);
         $('#customer').empty();
+        // All customer option
+        $('#customer').append(
+            $('<option>', {
+                value: "0",
+                text: "All"
+            })
+        );
+
         // if customer not found
         if(!customerList || customerList.length === 0){
-            $('#customer').append(
-                $('<option>', {
-                    value: "",
-                    text: "All"
-                })
-            );
             return;
         }
 

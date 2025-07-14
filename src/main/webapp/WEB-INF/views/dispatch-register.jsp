@@ -50,7 +50,7 @@
                     <!-- Customers -->
                     <label for="customer" class="required">Customer</label>
                     <select name="dto.customer" id="customer">
-                        <option value="">All</option>
+                        <option value="0">All</option>
                     </select>
 
                     <!-- Start Date -->
