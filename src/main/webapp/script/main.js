@@ -30,6 +30,31 @@ $(document).ready(function() {
         });
     }
 
+    // FUNCTION TO HANDLE DEFAULT DATA LIST
+    function handleDefaultDataList(response) {
+        console.log("handleDefaultDataList >> response >> ", response);
+        let data = response.data;
+
+        // Check if the response contains data
+        if (data.branches && Array.isArray(data.branches)) {
+            // Wrapping the data in a response-like object
+            handleLocationData({ data: data.branches });
+        }
+
+        if (data.divisions && Array.isArray(data.divisions)) {
+            handleDivisionData({ data: data.divisions });
+        }
+
+        if (data.fin_years && Array.isArray(data.fin_years)) {
+            handleFinancialYearData({ data: data.fin_years });
+        }
+
+        if (data.stock_points && Array.isArray(data.stock_points)) {
+            handleStockPointData({ data: data.stock_points });
+        }
+    }
+
+
     // FUNCTION TO POPULATE BRANCH LIST
     function handleLocationData(response) {
         let locationData = response.data;
@@ -184,7 +209,7 @@ $(document).ready(function() {
 
         $('#financialYear').append(
             $('<option>', {
-                value: "0",
+                value: "",
                 text: "Select"
             })
         );
@@ -208,7 +233,7 @@ $(document).ready(function() {
         // Set start date and end date values
         //$('#startDate').datepicker("setDate", financialYearList[0].start_dt);
         //$('#endDate').datepicker("setDate", financialYearList[0].end_dt);
-        setDateValues(financialYearList[0].start_dt, financialYearList[0].end_dt);
+        //setDateValues(financialYearList[0].start_dt, financialYearList[0].end_dt);
     }
 
     // FUNCTION TO SET START DATE & END DATE
@@ -267,10 +292,22 @@ $(document).ready(function() {
         makeAjaxRequest(`get-data?type=finYearDates&finYearId=${finYearId}`, handleFinYearDates);
     });
 
-    makeAjaxRequest("get-data?type=branchList", handleLocationData);
-    makeAjaxRequest("get-data?type=stockPointList", handleStockPointData);
-    makeAjaxRequest("get-data?type=divisionList", handleDivisionData);
-    makeAjaxRequest("get-data?type=financialYearList", handleFinancialYearData);
+//    makeAjaxRequest("get-data?type=branchList", handleLocationData);
+//    makeAjaxRequest("get-data?type=stockPointList", handleStockPointData);
+//    makeAjaxRequest("get-data?type=divisionList", handleDivisionData);
+//    makeAjaxRequest("get-data?type=financialYearList", handleFinancialYearData);
+
+    makeAjaxRequest("get-data?type=default", handleDefaultDataList);
+
+    function handleDispatchReportData(response) {
+        let division = response.division_desc;
+        console.log("-- division >> ", division);
+    }
+
+    $('#exit-btn').on('click', function() {
+        makeAjaxRequest("dispatch-register-data", handleDispatchReportData);
+    });
+
 
     // VALIDATIONS
     // map to tract user input errors

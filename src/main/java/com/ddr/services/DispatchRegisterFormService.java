@@ -14,6 +14,42 @@ public class DispatchRegisterFormService {
 
     private static DispatchRegisterFormDAO dao = new DispatchRegisterFormDAO();
 
+
+    public Map<String, Object> getDefaultDataList() {
+        logger.info("getting default data list..");
+        Map<String, Object> result = new HashMap<>();
+        try {
+            // getting locationData
+            List<Map<String, Object>> locationData = dao.getLocationData();
+
+            // getting stockPointData
+            List<Map<String, Object>> stockPointData = dao.getStockPointData();
+
+            // getting divisionData
+            List<Map<String, Object>> divisionData = dao.getDivisionData();
+
+            // getting financialYearData
+            List<Map<String, Object>> financialYearData = dao.getFinancialYearData();
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("branches", locationData);
+            data.put("stock_points", stockPointData);
+            data.put("divisions", divisionData);
+            data.put("fin_years", financialYearData);
+
+            result.put("success", true);
+            result.put("message", "Request successful");
+            result.put("data", data);
+            return result;
+
+        } catch (RuntimeException e) {
+            logger.error("Exception occurred in getDefaultValues >> ", e);
+            result.put("success", false);
+            result.put("message", e.getMessage());
+            return result;
+        }
+    }
+
     // Method to get Location Data from db
     public Map<String, Object> getBranchList() {
         Map<String, Object> result = new HashMap<>();
@@ -206,4 +242,5 @@ public class DispatchRegisterFormService {
             return result;
         }
     }
+
 }

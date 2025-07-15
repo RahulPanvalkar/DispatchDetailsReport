@@ -12,7 +12,7 @@
 	<body>
         <main class="form-section">
 
-            <s:form id="dispRegForm" action="dispatch-register-submit" method="post">
+            <s:form id="dispRegForm" action="dispatch-register-data" method="post">
                 <fieldset>
                     <legend class="form-title">Dispatch Register</legend>
                     <!-- Branch -->

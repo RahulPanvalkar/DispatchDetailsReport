@@ -60,11 +60,14 @@ public class DispatchRegisterExcelService {
 
             String finYearRange = registerDTO.getStartDate() + " TO " + registerDTO.getEndDate();
 
+            String divisionDesc = dispatchReportDAO.getDivisionNameByDivId(registerDTO.getDivision());
+            String division = "Division : " + divisionDesc;
+
             // Excel file path
             String filePath = "D:\\RAHUL\\TASK\\Dispatch details report summary\\DispatchDetailsReport\\module-resource\\Dispatch-Register-Summary.xlsx";
 
             // add data in file and return inputStream for downloading
-            InputStream inputStream = addDispatchDataInFile(filePath, dispRegList, compName, locationName, finYearRange);
+            InputStream inputStream = addDispatchDataInFile(filePath, dispRegList, compName, locationName, finYearRange, division);
 
             // after successful update return file path for downloading
             return inputStream;
@@ -75,7 +78,7 @@ public class DispatchRegisterExcelService {
     }
 
     // Method to create Excel file for Dispatch Register Report Summary
-    private static InputStream addDispatchDataInFile(String filePath, List<DispatchReport> dispRegList, String compName, String locationName, String finYearRange) {
+    private static InputStream addDispatchDataInFile(String filePath, List<DispatchReport> dispRegList, String compName, String locationName, String finYearRange, String division) {
         try {
 
             logger.debug("dispRegList size >> [{}]", dispRegList.size());
@@ -108,7 +111,7 @@ public class DispatchRegisterExcelService {
             createHeaderRow(workbook, xssfSheet, headers, 3);
 
             // Create custom styled row to show Division
-            createStyledRow(workbook, xssfSheet, 4, "Division : MAIN", 0, headerLength - 1,
+            createStyledRow(workbook, xssfSheet, 4, division, 0, headerLength - 1,
                     (short) 9, "Arial", IndexedColors.BLACK.getIndex(), IndexedColors.LIGHT_CORNFLOWER_BLUE.index,
                     true, false, CellStyle.ALIGN_LEFT);
 

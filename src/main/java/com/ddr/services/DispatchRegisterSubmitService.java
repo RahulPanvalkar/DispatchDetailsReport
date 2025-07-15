@@ -26,16 +26,17 @@ public class DispatchRegisterSubmitService {
     public Map<String, Object> getDispatchReportData(DispatchRegisterDTO registerDTO) {
         logger.debug("getting Dispatch Report data..");
         Map<String, Object> result = new HashMap<>();
-        // check if user input is valid
-        String[] valResult = isAllDataValid(registerDTO);
-
-        if ("false".equals(valResult[0])) {
-            result.put("success", false);
-            result.put("message", valResult[1]);
-            return result;
-        }
 
         try {
+            // check if user input is valid
+            String[] valResult = isAllDataValid(registerDTO);
+
+            if ("false".equals(valResult[0])) {
+                result.put("success", false);
+                result.put("message", valResult[1]);
+                return result;
+            }
+
             // getting DispatchRegister list
             List<DispatchReport> reports = dispatchReportDAO.callDispatchRegisterProcedure(registerDTO);
 
@@ -46,7 +47,7 @@ public class DispatchRegisterSubmitService {
                 return result;
             }
 
-            List<DispatchReportDTO> dispatchReportDto = reports.stream()
+            List<DispatchReportDTO> reportDTOList = reports.stream()
                     .map(DispatchReportDTO::new)
                     .toList();
 
@@ -62,14 +63,20 @@ public class DispatchRegisterSubmitService {
 
             String finYearRange = registerDTO.getStartDate() + " TO " + registerDTO.getEndDate();
 
+            String divisionDesc = dispatchReportDAO.getDivisionNameByDivId(registerDTO.getDivision());
+
+            int size = reportDTOList.size();
+
             // Excel file path
             String filePath = "D:\\RAHUL\\TASK\\Dispatch details report summary\\DispatchDetailsReport\\module-resource\\Dispatch-Register-Summary.xlsx";
 
             result.put("success", true);
             result.put("message", "Dispatch data fetched successfully");
-            result.put("data", dispatchReportDto);
+            result.put("data", reportDTOList);
+            result.put("total_records", size);
             result.put("loc_name", locationName);
             result.put("comp_name", compName);
+            result.put("div_desc", divisionDesc);
             result.put("fin_year_range", finYearRange);
             return result;
 
@@ -275,6 +282,13 @@ public class DispatchRegisterSubmitService {
 
             LocalDate startDt = CommonUtil.parseDate(startDtStr);
             LocalDate endDt = CommonUtil.parseDate(endDtStr);
+
+            if(startDt == null || endDt == null || dbStartDt == null || dbEndDt == null) {
+                logger.debug("Entered range extends beyond the financial year.");
+                res[0] = "false";
+                res[1] = "Entered range extends beyond the financial year.";
+                return res;
+            }
 
             // check if start date and end date comes under financial year range
             if (startDt.isBefore(dbStartDt) && endDt.isAfter(dbEndDt)) {

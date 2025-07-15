@@ -31,6 +31,9 @@ public class DispatchRegisterFormAction extends ActionSupport {
         this.type = (this.type == null || this.type.trim().isEmpty()) ? "" : this.type.trim();
 
         switch (type) {
+            case "default":
+                this.result = service.getDefaultDataList();
+                break;
             case "branchList":
                 this.result = service.getBranchList();
                 break;
@@ -61,6 +64,7 @@ public class DispatchRegisterFormAction extends ActionSupport {
         logger.debug("result >> {}", this.result);
         return SUCCESS;
     }
+
 
     public void setType(String type) {
         this.type = type;

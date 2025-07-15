@@ -17,10 +17,10 @@
             <result>/WEB-INF/views/dispatch-register.jsp</result>
         </action>
 
-        <!--<action name="dispatch-register-submit" class="com.ddr.actions.DispatchRegisterSubmitAction" method="submit">
+        <action name="dispatch-register-submit" class="com.ddr.actions.DispatchRegisterSubmitAction" method="submit">
             <result name="success">/WEB-INF/views/summary-report.jsp</result>
             <result name="error">/WEB-INF/views/dispatch-register.jsp</result>
-        </action>-->
+        </action>
     </package>
 
     <package name="json" namespace="/" extends="json-default">
@@ -33,7 +33,7 @@
             </result>
         </action>
 
-        <action name="dispatch-register-submit" class="com.ddr.actions.DispatchRegisterSubmitAction" method="submit">
+        <action name="dispatch-register-data" class="com.ddr.actions.DispatchRegisterSubmitAction" method="getData">
             <result name="success" type="json">
                 <param name="root">result</param>
             </result>

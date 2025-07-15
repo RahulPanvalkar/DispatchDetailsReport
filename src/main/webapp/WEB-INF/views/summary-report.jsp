@@ -8,6 +8,6 @@
 		<%@include file="./header.jsp" %>
 	</head>
 	<body>
-        
+        This is summary report page..
 	</body>
 </html>

@@ -137,4 +137,26 @@ public class DispatchReportDAO {
         }
         return "";
     }
+
+    public String getDivisionNameByDivId(String divId) {
+        String sql = "SELECT PARA_DESCR FROM PARAMETERS WHERE PARA_ID = ?";
+        int parameterCount = 0;
+        try (Connection conn = DBConnectionManager.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, divId);
+
+            logger.debug("Query : [{}], Param : [{}]", sql, divId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("PARA_DESCR");
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error("Exception occurred while getting Division >> ", e);
+            throw new RuntimeException(e);
+        }
+        return "";
+    }
 }
