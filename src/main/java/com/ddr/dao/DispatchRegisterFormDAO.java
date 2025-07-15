@@ -220,7 +220,7 @@ public class DispatchRegisterFormDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     String startDt = CommonUtil.convertToString(rs.getDate("START_DT"));
-                    String endDt = CommonUtil.convertToString(rs.getDate("END_DT").toLocalDate());
+                    String endDt = CommonUtil.convertToString(rs.getDate("END_DT"));
 
                     map.put("fin_year_id", finYearId);
                     map.put("start_dt", startDt);

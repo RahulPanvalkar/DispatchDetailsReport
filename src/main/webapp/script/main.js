@@ -181,14 +181,16 @@ $(document).ready(function() {
         let financialYearList = response.data;
         //console.log("json financialYearList >> ", financialYearList);
         $('#financialYear').empty();
+
+        $('#financialYear').append(
+            $('<option>', {
+                value: "0",
+                text: "Select"
+            })
+        );
+
         // if financial year list not found
         if(!financialYearList || financialYearList.length === 0){
-            $('#financialYear').append(
-                $('<option>', {
-                    value: "",
-                    text: "Select"
-                })
-            );
             return;
         }
 

@@ -45,7 +45,7 @@ public class CommonUtil {
             LocalDate date = LocalDate.parse(dateStr, formatter);
 			return date;
         } catch (DateTimeParseException e) {
-            logger.debug("Invalid Date Format: " + dateStr);
+            logger.error("Invalid Date Format: " + dateStr);
 			e.printStackTrace();
         }
 		return null;

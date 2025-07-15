@@ -2,25 +2,61 @@ package com.ddr.actions;
 
 import com.ddr.model.DispatchRegisterDTO;
 import com.ddr.services.DispatchRegisterExcelService;
+import com.ddr.services.DispatchRegisterSubmitService;
 import com.ddr.util.LoggerUtil;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.logging.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DispatchRegisterSubmitAction extends ActionSupport {
 
     Logger logger = LoggerUtil.getLogger(DispatchRegisterSubmitAction.class);
 
     private DispatchRegisterDTO dto;
+    public Map<String, Object> result = new HashMap<>();
+    private String message;
+    private boolean success;
+    private boolean error;
 
     public String submit() throws Exception {
         logger.debug("submit method called..");
         logger.debug("DTO : {}", dto);
 
-        DispatchRegisterExcelService excelService = new DispatchRegisterExcelService();
-        String filePath = excelService.updateFileData(dto);
-        logger.debug("filePath :: [{}]", filePath);
+        DispatchRegisterSubmitService service = new DispatchRegisterSubmitService();
+        result = service.getDispatchReportData(dto);
 
-        return NONE;
+        if (result == null || result.get("success") == null) {
+            error = true;
+            message = "Something went wrong!";
+            return ERROR;
+        } else if (!(Boolean) result.get("success")) {
+            error = true;
+            message = (String) result.get("message");
+            return ERROR;
+        }
+
+        //DispatchRegisterExcelService excelService = new DispatchRegisterExcelService();
+        //String filePath = excelService.updateFileData(dto);
+        //logger.debug("filePath :: [{}]", filePath);
+
+        /*HttpServletResponse response = ServletActionContext.getResponse();
+        try (InputStream inputStream = excelService.updateFileData(dto);
+             ServletOutputStream outputStream = response.getOutputStream()) {
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setHeader("Content-Disposition", "attachment; filename=\"Dispatch-Register-Summary.xlsx\"");
+
+            inputStream.transferTo(outputStream);
+            outputStream.flush();
+        }*/
+
+        return SUCCESS;
     }
 
     public void setDto(DispatchRegisterDTO dto) {
@@ -29,5 +65,29 @@ public class DispatchRegisterSubmitAction extends ActionSupport {
 
     public DispatchRegisterDTO getDto() {
         return dto;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public boolean isError() {
+        return error;
+    }
+
+    public void setError(boolean error) {
+        this.error = error;
     }
 }

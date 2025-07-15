@@ -1,10 +1,10 @@
 package com.ddr.model;
 
-import java.time.LocalDate;
+import com.ddr.util.CommonUtil;
 
-public class DispatchReport {
+public class DispatchReportDTO {
     private String dspTrnNo;    // TRANSACTION NO >> 000000000000001
-    private LocalDate dspDt;    // DISPATCH DATE >> 04/04/2023
+    private String dspDtStr;    // DISPATCH DATE >> 04/04/2023
     private String custName;    // PARTY >> RUBY PHARMA
     private String destination; // DESTINATION >> SOLAPUR
     private String transporter; // TRANSPORTER >> BTI
@@ -13,40 +13,45 @@ public class DispatchReport {
     private String lrNum;   // LR NO >> 675433
     private String driverName;  // DRIVER NAME
     private String lorryNo;     // LORRY NUMBER
-    private LocalDate lrDate;   // LR DATE >> 04/04/2023
+    private String lrDateStr;   // LR DATE >> 04/04/2023
     private int delayDays;      // DISPATCH DELAY >> 1.00
     private int noOfCases;      // NO OF CASES >> 13.00
     private String formNum;     // FORM NUM >> NA
-    private LocalDate cFormDate;    // C FORM DATE >> 04/04/2023
+    private String cFormDateStr;    // C FORM DATE >> 04/04/2023
     private int cFormValue;     // C FORM VALUE >> 0.00
-    private LocalDate podDate;  // POD DATE
+    private String podDateStr;  // POD DATE
     private int podNum;     // POD NUMBER
     private String podReason;   // REASON
 
-
-    // CURRENTLY NOT REQUIRED
-//    private long rowNum;
-//    private long dspId;
-//    private long divId;
-//    private String division;
-//    private String challanNo;
-//    private int custId;
-//    private float dspValue;
-//    private int prodId;
-//    private String prodCd;
-//    private String prodName;
-//    private int batchId;
-//    private String batchNo;
-//    private long orderNo;
-//    private int sold;
-//    private int free;
-//    private int repl;
-//    private float rate;
-//    private double tax;
-//    private double discount;
-
-    public DispatchReport() {
+    public DispatchReportDTO() {
     }
+
+    public DispatchReportDTO(DispatchReport dispatchReport) {
+
+        // Convert Dates
+        this.cFormDateStr = CommonUtil.convertToString(dispatchReport.getcFormDate());
+        this.podDateStr = CommonUtil.convertToString(dispatchReport.getPodDate());
+        this.lrDateStr = CommonUtil.convertToString(dispatchReport.getLrDate());
+        this.dspDtStr = CommonUtil.convertToString(dispatchReport.getDspDt());
+
+        // Set remaining values
+        this.dspTrnNo = dispatchReport.getDspTrnNo();
+        this.custName = dispatchReport.getCustName();
+        this.destination = dispatchReport.getDestination();
+        this.transporter = dispatchReport.getTransporter();
+        this.goodsValue = dispatchReport.getGoodsValue();
+        this.invNo = dispatchReport.getInvNo();
+        this.lrNum = dispatchReport.getLrNum();
+        this.driverName = dispatchReport.getDriverName();
+        this.lorryNo = dispatchReport.getLorryNo();
+        this.delayDays = dispatchReport.getDelayDays();
+        this.noOfCases = dispatchReport.getNoOfCases();
+        this.formNum = dispatchReport.getFormNum();
+        this.cFormValue = dispatchReport.getcFormValue();
+        this.podNum = dispatchReport.getPodNum();
+        this.podReason = dispatchReport.getPodReason();
+    }
+
 
     public String getDspTrnNo() {
         return dspTrnNo;
@@ -56,12 +61,12 @@ public class DispatchReport {
         this.dspTrnNo = dspTrnNo;
     }
 
-    public LocalDate getDspDt() {
-        return dspDt;
+    public String getDspDtStr() {
+        return dspDtStr;
     }
 
-    public void setDspDt(LocalDate dspDt) {
-        this.dspDt = dspDt;
+    public void setDspDtStr(String dspDtStr) {
+        this.dspDtStr = dspDtStr;
     }
 
     public String getCustName() {
@@ -128,12 +133,12 @@ public class DispatchReport {
         this.lorryNo = lorryNo;
     }
 
-    public LocalDate getLrDate() {
-        return lrDate;
+    public String getLrDateStr() {
+        return lrDateStr;
     }
 
-    public void setLrDate(LocalDate lrDate) {
-        this.lrDate = lrDate;
+    public void setLrDateStr(String lrDateStr) {
+        this.lrDateStr = lrDateStr;
     }
 
     public int getDelayDays() {
@@ -160,12 +165,12 @@ public class DispatchReport {
         this.formNum = formNum;
     }
 
-    public LocalDate getcFormDate() {
-        return cFormDate;
+    public String getcFormDateStr() {
+        return cFormDateStr;
     }
 
-    public void setcFormDate(LocalDate cFormDate) {
-        this.cFormDate = cFormDate;
+    public void setcFormDateStr(String cFormDateStr) {
+        this.cFormDateStr = cFormDateStr;
     }
 
     public int getcFormValue() {
@@ -176,12 +181,12 @@ public class DispatchReport {
         this.cFormValue = cFormValue;
     }
 
-    public LocalDate getPodDate() {
-        return podDate;
+    public String getPodDateStr() {
+        return podDateStr;
     }
 
-    public void setPodDate(LocalDate podDate) {
-        this.podDate = podDate;
+    public void setPodDateStr(String podDateStr) {
+        this.podDateStr = podDateStr;
     }
 
     public int getPodNum() {
@@ -199,17 +204,4 @@ public class DispatchReport {
     public void setPodReason(String podReason) {
         this.podReason = podReason;
     }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "%nDispatchRegister{dspTrnNo='%s', dspDt=%s, custName='%s', destination='%s', transporter='%s', %n" +
-                        "goodsValue=%.2f, invNo='%s', lrNum='%s', driverName='%s', lorryNo='%s', lrDate=%s, delayDays=%d, %n" +
-                        "noOfCases=%d, formNum='%s', cFormDate=%s, cFormValue=%d, podDate=%s, podNum=%d, podReason='%s'}",
-                dspTrnNo, dspDt, custName, destination, transporter, goodsValue, invNo, lrNum, driverName, lorryNo, lrDate,
-                delayDays, noOfCases, formNum, cFormDate, cFormValue, podDate, podNum, podReason
-        );
-    }
-
-
 }

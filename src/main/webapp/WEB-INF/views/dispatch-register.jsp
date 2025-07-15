@@ -18,19 +18,19 @@
                     <!-- Branch -->
                     <label for="branch" class="required">Branch</label>
                     <select name="dto.branch" id="branch">
-                        <option value="">Select</option>
+                        <option value="0">Select</option>
                     </select>
 
                     <!-- Stock Point -->
                     <label for="stockPoint" class="required">Stock Point</label>
                     <select name="dto.stockPoint" id="stockPoint">
-                        <option value="">Select</option>
+                        <option value="0">Select</option>
                     </select>
 
                     <!-- Division -->
                     <label for="division" class="required">Division</label>
                     <select name="dto.division" id="division">
-                        <option value="">Select</option>
+                        <option value="0">Select</option>
                     </select>
 
                     <!-- Report Type -->

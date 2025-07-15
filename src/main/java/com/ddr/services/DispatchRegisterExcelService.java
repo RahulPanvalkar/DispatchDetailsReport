@@ -11,8 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
@@ -41,11 +40,11 @@ public class DispatchRegisterExcelService {
         service.updateFileData(dto);
     }*/
 
-    public String updateFileData(DispatchRegisterDTO registerDTO) {
+    public InputStream updateFileData(DispatchRegisterDTO registerDTO) {
         logger.debug("updating excel file..");
         if (registerDTO == null) {
             logger.debug("registerDTO is null");
-            return "";
+            return null;
         }
         try {
             // getting DispatchRegister list
@@ -53,31 +52,30 @@ public class DispatchRegisterExcelService {
 
             // get Location Name
             String branch = registerDTO.getBranch();
-            if (branch == null || branch.trim().isEmpty()) branch = "";
+            if (branch == null || branch.trim().isEmpty()) branch = null;
             String locationName = dispatchReportDAO.getLocationNameByLocId(Integer.parseInt(branch));
 
-            // get customer name
-            String custId = registerDTO.getBranch();
-            if (custId == null || custId.trim().isEmpty()) return "";
-            String custName = dispatchReportDAO.getCustomerNameByCustId(custId);
+            // Company name
+            String compName = "HEALTHCARE PVT LTD.";    // for company_id=SNK
 
             String finYearRange = registerDTO.getStartDate() + " TO " + registerDTO.getEndDate();
 
-            //Excel file path
+            // Excel file path
             String filePath = "D:\\RAHUL\\TASK\\Dispatch details report summary\\DispatchDetailsReport\\module-resource\\Dispatch-Register-Summary.xlsx";
 
-            addDispatchDataInFile(filePath, dispRegList, custName, locationName, finYearRange);
+            // add data in file and return inputStream for downloading
+            InputStream inputStream = addDispatchDataInFile(filePath, dispRegList, compName, locationName, finYearRange);
 
             // after successful update return file path for downloading
-            return filePath;
+            return inputStream;
         } catch (Exception e) {
             logger.error("Exception occurred in updateFileData :: ", e);
         }
-        return "";
+        return null;
     }
 
-    //
-    private static void addDispatchDataInFile(String filePath, List<DispatchReport> dispRegList, String custName, String locationName, String finYearRange) {
+    // Method to create Excel file for Dispatch Register Report Summary
+    private static InputStream addDispatchDataInFile(String filePath, List<DispatchReport> dispRegList, String compName, String locationName, String finYearRange) {
         try {
 
             logger.debug("dispRegList size >> [{}]", dispRegList.size());
@@ -96,8 +94,13 @@ public class DispatchRegisterExcelService {
             int headerLength = headers.length;
 
             // Create title in row 0 , 1, 2
+            if (compName == null || locationName == null) {
+                compName = "";
+                locationName = "";
+            }
+
             String title = "Dispatch Register Summary Report From : " + finYearRange;
-            createTitleRow(workbook, xssfSheet, custName.toUpperCase(), headerLength, 0);
+            createTitleRow(workbook, xssfSheet, compName.toUpperCase(), headerLength, 0);
             createTitleRow(workbook, xssfSheet, locationName.toUpperCase(), headerLength, 1);
             createTitleRow(workbook, xssfSheet, title, headerLength, 2);
 
@@ -223,12 +226,25 @@ public class DispatchRegisterExcelService {
             }
 
             // Write to file
-            File file = new File(filePath);
-            FileOutputStream fos = new FileOutputStream(file);
-            workbook.write(fos);
+//            File file = new File(filePath);
+//            FileOutputStream fos = new FileOutputStream(file);
+//            workbook.write(fos);
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            workbook.write(bos);
+
+            // Save to disk
+            try (FileOutputStream foss = new FileOutputStream(new File(filePath))) {
+                bos.writeTo(foss);
+            }
+
+            // Return for download
+            return new ByteArrayInputStream(bos.toByteArray());
+
         } catch (Exception e) {
             logger.error("Exception occurred in addDispatchDataInFile :: ", e);
         }
+        return null;
     }
 
     // Method to create the title row
