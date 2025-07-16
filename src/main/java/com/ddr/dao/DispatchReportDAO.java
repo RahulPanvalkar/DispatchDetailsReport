@@ -68,7 +68,7 @@ public class DispatchReportDAO {
                     dispReg.setCustName(rs.getString("CUST_NAME"));
                     dispReg.setDestination(rs.getString("DESTINATION"));
                     dispReg.setTransporter(rs.getString("TRANSPORTER"));
-                    dispReg.setGoodsValue(rs.getDouble("GOODS_VALUE"));
+                    dispReg.setGoodsValue(rs.getBigDecimal("GOODS_VALUE"));
                     dispReg.setInvNo(rs.getString("INV_NO"));
                     dispReg.setLrNum(rs.getString("LR_NUM"));
                     dispReg.setDriverName(rs.getString("DRIVER_NAME"));

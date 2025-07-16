@@ -2,13 +2,15 @@ package com.ddr.model;
 
 import com.ddr.util.CommonUtil;
 
+import java.math.BigDecimal;
+
 public class DispatchReportDTO {
     private String dspTrnNo;    // TRANSACTION NO >> 000000000000001
     private String dspDtStr;    // DISPATCH DATE >> 04/04/2023
     private String custName;    // PARTY >> RUBY PHARMA
     private String destination; // DESTINATION >> SOLAPUR
     private String transporter; // TRANSPORTER >> BTI
-    private double goodsValue;  // GOODS VALUE >> 12934.00
+    private BigDecimal goodsValue;  // GOODS VALUE >> 12934.00
     private String invNo;   // INVOICE NO >> BWMNI2300001
     private String lrNum;   // LR NO >> 675433
     private String driverName;  // DRIVER NAME
@@ -93,11 +95,11 @@ public class DispatchReportDTO {
         this.transporter = transporter;
     }
 
-    public double getGoodsValue() {
+    public BigDecimal getGoodsValue() {
         return goodsValue;
     }
 
-    public void setGoodsValue(double goodsValue) {
+    public void setGoodsValue(BigDecimal goodsValue) {
         this.goodsValue = goodsValue;
     }
 

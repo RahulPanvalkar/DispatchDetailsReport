@@ -13,6 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class DispatchRegisterExcelService {
@@ -30,8 +31,8 @@ public class DispatchRegisterExcelService {
         dto.setDivision("327");
         dto.setStartDate("01/04/2023");
         dto.setEndDate("31/03/2024");
-        dto.setCustomer("231");
-        dto.setReportType("N");
+        dto.setCustomer("0");
+        dto.setReportType("Y");
         dto.setFinancialYear("17");
 
         DispatchRegisterExcelService service = new DispatchRegisterExcelService();
@@ -138,6 +139,8 @@ public class DispatchRegisterExcelService {
             dataStyle.setBorderRight(CellStyle.BORDER_THIN);
             dataStyle.setBorderBottom(CellStyle.BORDER_THIN);
 
+            BigDecimal goodsValueTotal = BigDecimal.ZERO;
+
             int rowNum = 4;
             for (DispatchReport dispReg : dispRegList) {
                 ++rowNum;
@@ -167,7 +170,11 @@ public class DispatchRegisterExcelService {
                 cell4.setCellStyle(dataStyle);
 
                 Cell cell5 = row.createCell(5);
-                cell5.setCellValue(dispReg.getGoodsValue());
+                if (dispReg.getGoodsValue() != null) {
+                    cell5.setCellValue(dispReg.getGoodsValue().doubleValue());
+                    // to get total value of goods
+                    goodsValueTotal = goodsValueTotal.add(dispReg.getGoodsValue());
+                }
                 cell5.setCellStyle(dataStyle);
 
                 Cell cell6 = row.createCell(6);
@@ -230,7 +237,8 @@ public class DispatchRegisterExcelService {
 
             }
 
-            double goodsValueTotal = getGoodsValueTotal(dispRegList);
+            // get the total value of goods
+            //BigDecimal goodsValueTotal = getGoodsValueTotal(dispRegList);
 
             // Create custom styled row to show Division
             String divisionTotal = "Division Total : ";
@@ -377,7 +385,7 @@ public class DispatchRegisterExcelService {
 
     // Method to create custom styled row
     public static void createStyledRowWithCols(XSSFWorkbook workbook, XSSFSheet sheet,
-                                               int rowIndex, String cellName, double cellValue, int startCol, int endCol,
+                                               int rowIndex, String cellName, BigDecimal cellValue, int startCol, int endCol,
                                                short fontSize, String fontName, short fontColor,
                                                short bgColor, boolean isBold, boolean wrapText, short alignment) {
 
@@ -399,6 +407,7 @@ public class DispatchRegisterExcelService {
         style.setAlignment(alignment);
         style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
 
+
         style.setBorderTop(CellStyle.BORDER_THIN);
         style.setBorderLeft(CellStyle.BORDER_THIN);
         style.setBorderRight(CellStyle.BORDER_THIN);
@@ -416,8 +425,12 @@ public class DispatchRegisterExcelService {
 
         // Create the 6th column as a single cell
         Cell cell6 = row.createCell(startCol + 5);
-        cell6.setCellValue(cellValue);
-        cell6.setCellStyle(style);
+        CellStyle newStyle = workbook.createCellStyle();
+        // create new style to set alignment for this cell only
+        newStyle.cloneStyleFrom(style);
+        newStyle.setAlignment(CellStyle.ALIGN_RIGHT);
+        cell6.setCellValue(cellValue.doubleValue());
+        cell6.setCellStyle(newStyle);
 
         // Merge the remaining columns after the 4th column
         sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, startCol + 6, endCol));  // Merges remaining columns
@@ -432,20 +445,25 @@ public class DispatchRegisterExcelService {
 
     }
 
-    private static double getGoodsValueTotal(List<DispatchReport> dispRepDataList) {
-        logger.debug("getting total goods value..");
+    private static BigDecimal getGoodsValueTotal(List<DispatchReport> dispRepDataList) {
+        logger.debug("Getting total goods value...");
+
         if (dispRepDataList == null || dispRepDataList.isEmpty()) {
-            return 0.0;
+            return BigDecimal.ZERO;
         }
 
-        double total = 0;
+        BigDecimal total = BigDecimal.ZERO;
+
         for (DispatchReport dispRepData : dispRepDataList) {
-            double goodsValue = dispRepData.getGoodsValue();
-            total += goodsValue;
+            BigDecimal goodsValue = dispRepData.getGoodsValue();
+            if (goodsValue != null) {
+                total = total.add(goodsValue);
+            }
         }
 
-        logger.debug("Total goods values [{}]", total);
+        logger.debug("Total goods value: [{}]", total);
         return total;
     }
+
 
 }
