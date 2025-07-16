@@ -48,9 +48,10 @@ select:focus {
     border: 1px solid #ffb8b8;
 }
 
-select, input {
+#dispRegForm .input-box select, #dispRegForm .input-box input {
+    width: 12.5rem;
     max-width: 12.5rem;
-    padding: 0;
+    padding: 0.25rem 0;
     font-size: 0.8rem;
 }
 
@@ -60,8 +61,8 @@ select:focus, input:focus {
 }
 
 .date {
-    max-width: 12.162rem;
-    padding-left: 0.2rem;
+    max-width: 12.162rem !important;
+    padding-left: 0.2rem !important;
 }
 
 .form-actions {
@@ -83,7 +84,6 @@ select:focus, input:focus {
 }
 
 .btn-enabled {
-	background: var(--c-primary);
     color: var(--c-white);
     cursor: pointer;
 }
@@ -96,6 +96,22 @@ select:focus, input:focus {
 
 .btn-disabled:hover {
     background: rgba(239, 239, 239, 0.3);
+}
+
+.error {
+	color: var(--c-error-txt);
+	margin: 0.5rem 0 0 0;
+}
+
+.success {
+	color: green;
+}
+
+#message {
+    font-size: 1rem;
+	font-weight: 500;
+	text-align: center;
+    margin-bottom: 1rem;
 }
 
 /*-- Date Picker --*/
@@ -112,7 +128,6 @@ select:focus, input:focus {
 #ui-datepicker-div {
     font-size: 0.9rem;
 }
-
 
 
 /***********************/

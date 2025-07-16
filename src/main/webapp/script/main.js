@@ -132,6 +132,7 @@ $(document).ready(function() {
                     text: "Select"
                 })
             );
+            $('#stockPoint').trigger("change");
             return;
         }
         // set stock point
@@ -141,6 +142,7 @@ $(document).ready(function() {
                 text: stockPoint.loc_name
             })
         );
+        $('#stockPoint').trigger("change"); // trigger change event
     }
 
     // FUNCTION TO SET CUSTOMER LIST BASED ON BRANCH
@@ -171,6 +173,7 @@ $(document).ready(function() {
                 })
             );
         });
+        $('#customer').trigger("change"); // trigger change event
     }
 
     // FUNCTION TO POPULATE DIVISION LIST
@@ -274,8 +277,8 @@ $(document).ready(function() {
             maxDate: endDateObj
         });
 
-        $('#startDate').datepicker("setDate", startDateObj);
-        $('#endDate').datepicker("setDate", endDateObj);
+        $('#startDate').datepicker("setDate", startDateObj).trigger("change");
+        $('#endDate').datepicker("setDate", endDateObj).trigger("change");
 
     }
 
@@ -298,16 +301,6 @@ $(document).ready(function() {
 //    makeAjaxRequest("get-data?type=financialYearList", handleFinancialYearData);
 
     makeAjaxRequest("get-data?type=default", handleDefaultDataList);
-
-    function handleDispatchReportData(response) {
-        let division = response.division_desc;
-        console.log("-- division >> ", division);
-    }
-
-    $('#exit-btn').on('click', function() {
-        makeAjaxRequest("dispatch-register-data", handleDispatchReportData);
-    });
-
 
     // VALIDATIONS
     // map to tract user input errors
@@ -347,7 +340,7 @@ $(document).ready(function() {
         }
         console.log("isAllValid", isAllValid);
         // if isAllValid is false disable submit button
-        //toggleSubmitBtn(isAllValid);
+        toggleSubmitBtn(isAllValid);
     }
 
     checkErrors(errors);
@@ -358,27 +351,225 @@ $(document).ready(function() {
     });
 
 
+    // Validate branch
+    $("#branchCheck").hide();
+    $('#branch').on('change blur', function() {
+        errors.set("branch",!validateBranch());
+        checkErrors(errors);
+    });
+
+    // Validate stockPoint
+    $("#stockPointCheck").hide();
+    $('#stockPoint').on('change blur', function() {
+        errors.set("stockPoint",!validateStockPoint());
+        checkErrors(errors);
+    });
+
+    // Validate division
+    $("#divisionCheck").hide();
+    $('#division').on('change blur', function() {
+        errors.set("division",!validateDivision());
+        checkErrors(errors);
+    });
+
+    // Validate reportType
+    $("#reportTypeCheck").hide();
+    $('#reportType').on('change blur', function() {
+        errors.set("reportType",!validateReportType());
+        checkErrors(errors);
+    });
+
+    // Validate customer
+    $("#customerCheck").hide();
+    $('#customer').on('change blur', function() {
+        errors.set("customer",!validateCustomer());
+        checkErrors(errors);
+    });
+
+    // Validate financialYear
+    $("#finYearCheck").hide();
+    $('#financialYear').on('change blur', function() {
+        errors.set("finYear",!validateFinancialYear());
+        checkErrors(errors);
+    });
+
+    // Validate start date
+    $("#startDtCheck").hide();
+    $('#startDate').on('change blur', function() {
+        errors.set("startDt",!validateStartDate());
+        checkErrors(errors);
+    });
+
+    // Validate end date
+    $("#endDtCheck").hide();
+    $('#endDate').on('change blur', function() {
+        errors.set("endDt",!validateEndDate());
+        checkErrors(errors);
+    });
+
+
     // function to validate fields
-    function validateField(event) {
-        console.log("validateCaptcha is called..");
-        let captchaValue = $("#captchaTxt").val();
-        console.log(captchaValue);
+    function validateBranch() {
+        console.log("validateBranch is called..");
+        let branch = $("#branch").val();
+        console.log(branch);
 
-        let regex = /^[A-Za-z0-9]+$/;
+        let regex = /^[0-9]+$/;
 
-        if (!captchaValue) {
-            $("#captchaCheck").show();
-            $("#captchaCheck").html("CAPTCHA is missing");
+        if (!branch) {
+            $("#branchCheck").show();
+            $("#branchCheck").html("Branch is required");
             return false;
-        } else if (!regex.test(captchaValue) || captchaValue.length !== 5) {
-                $("#captchaCheck").show();
-                $("#captchaCheck").html("Invalid CAPTCHA");
-                $("#captchaTxt").html("");
+        } else if (!regex.test(branch) || branch === '0') {
+                $("#branchCheck").show();
+                $("#branchCheck").html("Invalid Branch");
+                //$("#branch").html("");
                 return false;
         }
 
-        $("#captchaCheck").hide();
+        $("#branchCheck").hide();
         return true;
     }
+
+    function validateStockPoint() {
+        console.log("validateStockPoint is called..");
+        let stockPoint = $("#stockPoint").val();
+        console.log(stockPoint);
+
+        let regex = /^[0-9]+$/;
+        if (!stockPoint) {
+            $("#stockPointCheck").show().html("Stock Point is required");
+            return false;
+        } else if (!regex.test(stockPoint) || stockPoint === '0') {
+             $("#stockPointCheck").show();
+             $("#stockPointCheck").html("Invalid stock point");
+             //$("#branch").html("");
+             return false;
+         }
+
+        $("#stockPointCheck").hide();
+        return true;
+    }
+
+    function validateDivision() {
+        console.log("validateDivision is called..");
+        let division = $("#division").val();
+        console.log(division);
+
+        let regex = /^[0-9]+$/;
+        if (!division) {
+            $("#divisionCheck").show().html("Division is required");
+            return false;
+        } else if (!regex.test(division) || division === '0') {
+            $("#divisionCheck").show();
+            $("#divisionCheck").html("Invalid division");
+            //$("#branch").html("");
+            return false;
+        }
+
+        $("#divisionCheck").hide();
+        return true;
+    }
+
+    function validateReportType() {
+        console.log("validateReportType is called..");
+        let reportType = $("#reportType").val();
+        console.log(reportType);
+
+        if (!reportType) {
+            $("#reportTypeCheck").show().html("Report Type is required");
+            return false;
+        }
+
+        $("#reportTypeCheck").hide();
+        return true;
+    }
+
+    function validateCustomer() {
+        console.log("validateCustomer is called..");
+        let customer = $("#customer").val();
+        console.log(customer);
+
+        if (!customer) {
+            $("#customerCheck").show().html("Customer is required");
+            return false;
+        }
+
+        $("#customerCheck").hide();
+        return true;
+    }
+
+    function validateFinancialYear() {
+        console.log("validateFinancialYear is called..");
+        let finYear = $("#financialYear").val();
+        console.log(finYear);
+
+        if (!finYear) {
+            $("#finYearCheck").show().html("Financial Year is required");
+            return false;
+        }
+
+        $("#finYearCheck").hide();
+        return true;
+    }
+
+    function validateStartDate() {
+        console.log("validateStartDate is called..");
+
+        let finYearId = $("#financialYear").val();
+        if(!finYearId) {
+            validateFinancialYear();
+            $("#startDate").html("");
+            return false;
+        }
+
+        let startDate = $("#startDate").val();
+        console.log(startDate);
+
+        let regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/([0-9]{4})$/;
+
+        if (!startDate) {
+            $("#startDtCheck").show().html("Start Date is required");
+            return false;
+        }  else if (!regex.test(startDate)) {
+            $("#startDtCheck").show();
+            $("#startDtCheck").html("Invalid start date format");
+            $("#startDate").datepicker("setDate", null);
+            return false;
+        }
+
+        $("#startDtCheck").hide();
+        return true;
+    }
+
+    function validateEndDate() {
+        console.log("validateEndDate is called..");
+
+        let finYearId = $("#financialYear").val();
+        if(!finYearId) {
+            validateFinancialYear();
+            $("#endDate").datepicker("setDate", null);
+            return false;
+        }
+
+        let endDate = $("#endDate").val();
+        console.log(endDate);
+
+        let regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/([0-9]{4})$/;
+
+        if (!endDate) {
+            $("#endDtCheck").show().html("End Date is required");
+            return false;
+        }  else if (!regex.test(endDate)) {
+             $("#endDtCheck").show();
+             $("#endDtCheck").html("Invalid End date format");
+             $("#endDate").html("");
+             return false;
+        }
+
+        $("#endDtCheck").hide();
+        return true;
+    }
+
 });
 
