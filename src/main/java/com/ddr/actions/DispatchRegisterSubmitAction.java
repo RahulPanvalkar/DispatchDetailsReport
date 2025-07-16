@@ -33,6 +33,17 @@ public class DispatchRegisterSubmitAction extends ActionSupport {
         return response;
     }
 
+    public String getDispatchDataFromSession() throws Exception {
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        // Check if the session contains the "dispatch_data" key
+        if (session != null && session.containsKey("dispatch_data")) {
+            result = (Map<String, Object>) session.get("dispatch_data");
+        } else {
+            result = new HashMap<>();
+        }
+        return SUCCESS;
+    }
+
     public String getData() throws Exception {
         logger.debug("getData method called..");
         logger.debug("DTO :: {}", dto);

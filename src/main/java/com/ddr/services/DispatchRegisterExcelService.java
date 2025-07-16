@@ -11,11 +11,9 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.*;
-import java.sql.Date;
-import java.util.Arrays;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
-import java.util.function.Function;
 
 public class DispatchRegisterExcelService {
 
@@ -23,28 +21,28 @@ public class DispatchRegisterExcelService {
 
     private static final Logger logger = LoggerUtil.getLogger(DispatchRegisterExcelService.class);
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         //DownloadService service = new DownloadService();
         String filePath = "D:\\RAHUL\\TASK\\Dispatch details report summary\\DispatchDetailsReport\\module-resource\\Dispatch-Register-Summary.xlsx";
         DispatchRegisterDTO dto = new DispatchRegisterDTO();
         dto.setBranch("10");
         dto.setStockPoint("10");
-        dto.setDivision("0");
+        dto.setDivision("327");
         dto.setStartDate("01/04/2023");
         dto.setEndDate("31/03/2024");
-        dto.setCustomer("0");
+        dto.setCustomer("231");
         dto.setReportType("N");
         dto.setFinancialYear("17");
 
         DispatchRegisterExcelService service = new DispatchRegisterExcelService();
         service.updateFileData(dto);
-    }*/
+    }
 
-    public InputStream updateFileData(DispatchRegisterDTO registerDTO) {
+    public void updateFileData(DispatchRegisterDTO registerDTO) {
         logger.debug("updating excel file..");
         if (registerDTO == null) {
             logger.debug("registerDTO is null");
-            return null;
+            return;
         }
         try {
             // getting DispatchRegister list
@@ -67,18 +65,19 @@ public class DispatchRegisterExcelService {
             String filePath = "D:\\RAHUL\\TASK\\Dispatch details report summary\\DispatchDetailsReport\\module-resource\\Dispatch-Register-Summary.xlsx";
 
             // add data in file and return inputStream for downloading
-            InputStream inputStream = addDispatchDataInFile(filePath, dispRegList, compName, locationName, finYearRange, division);
+            //InputStream inputStream =
+            addDispatchDataInFile(filePath, dispRegList, compName, locationName, finYearRange, division);
 
             // after successful update return file path for downloading
-            return inputStream;
+            // return filePath;
         } catch (Exception e) {
             logger.error("Exception occurred in updateFileData :: ", e);
         }
-        return null;
+        //return filePath;
     }
 
     // Method to create Excel file for Dispatch Register Report Summary
-    private static InputStream addDispatchDataInFile(String filePath, List<DispatchReport> dispRegList, String compName, String locationName, String finYearRange, String division) {
+    private static void addDispatchDataInFile(String filePath, List<DispatchReport> dispRegList, String compName, String locationName, String finYearRange, String division) {
         try {
 
             logger.debug("dispRegList size >> [{}]", dispRegList.size());
@@ -125,11 +124,19 @@ public class DispatchRegisterExcelService {
             short dateFormat = workbook.createDataFormat().getFormat("dd/MM/yyyy");
             dateStyle.setDataFormat(dateFormat);
             dateStyle.setFont(cellFont);
+            dateStyle.setBorderTop(CellStyle.BORDER_THIN);
+            dateStyle.setBorderLeft(CellStyle.BORDER_THIN);
+            dateStyle.setBorderRight(CellStyle.BORDER_THIN);
+            dateStyle.setBorderBottom(CellStyle.BORDER_THIN);
 
             // Data cell style
             CellStyle dataStyle = workbook.createCellStyle();
             dataStyle.setFont(cellFont);
             dataStyle.setFillForegroundColor(IndexedColors.WHITE.getIndex());
+            dataStyle.setBorderTop(CellStyle.BORDER_THIN);
+            dataStyle.setBorderLeft(CellStyle.BORDER_THIN);
+            dataStyle.setBorderRight(CellStyle.BORDER_THIN);
+            dataStyle.setBorderBottom(CellStyle.BORDER_THIN);
 
             int rowNum = 4;
             for (DispatchReport dispReg : dispRegList) {
@@ -223,31 +230,46 @@ public class DispatchRegisterExcelService {
 
             }
 
+            double goodsValueTotal = getGoodsValueTotal(dispRegList);
+
+            // Create custom styled row to show Division
+            String divisionTotal = "Division Total : ";
+            createStyledRowWithCols(workbook, xssfSheet, ++rowNum, divisionTotal, goodsValueTotal, 0, headerLength - 1,
+                    (short) 9, "Arial", IndexedColors.BLACK.getIndex(), IndexedColors.LIGHT_CORNFLOWER_BLUE.index,
+                    false, false, CellStyle.ALIGN_LEFT);
+
+            // Create custom styled row to show Division
+            String grandTotal = "Grand Total : ";
+            createStyledRowWithCols(workbook, xssfSheet, ++rowNum, grandTotal, goodsValueTotal, 0, headerLength - 1,
+                    (short) 9, "Arial", IndexedColors.BLACK.getIndex(), IndexedColors.LIGHT_CORNFLOWER_BLUE.index,
+                    false, false, CellStyle.ALIGN_LEFT);
+
+
             // to set column size to auto
             for (int i = 0; i < headers.length; i++) {
                 xssfSheet.autoSizeColumn(i);
             }
 
             // Write to file
-//            File file = new File(filePath);
-//            FileOutputStream fos = new FileOutputStream(file);
-//            workbook.write(fos);
+            File file = new File(filePath);
+            FileOutputStream fos = new FileOutputStream(file);
+            workbook.write(fos);
 
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            workbook.write(bos);
-
-            // Save to disk
-            try (FileOutputStream foss = new FileOutputStream(new File(filePath))) {
-                bos.writeTo(foss);
-            }
-
-            // Return for download
-            return new ByteArrayInputStream(bos.toByteArray());
+//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//            workbook.write(bos);
+//
+//            // Save to disk
+//            try (FileOutputStream foss = new FileOutputStream(new File(filePath))) {
+//                bos.writeTo(foss);
+//            }
+//
+//            // Return for download
+//            return new ByteArrayInputStream(bos.toByteArray());
 
         } catch (Exception e) {
             logger.error("Exception occurred in addDispatchDataInFile :: ", e);
         }
-        return null;
+        //return null;
     }
 
     // Method to create the title row
@@ -351,6 +373,79 @@ public class DispatchRegisterExcelService {
         if (endCol > startCol) {
             sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, startCol, endCol));
         }
+    }
+
+    // Method to create custom styled row
+    public static void createStyledRowWithCols(XSSFWorkbook workbook, XSSFSheet sheet,
+                                               int rowIndex, String cellName, double cellValue, int startCol, int endCol,
+                                               short fontSize, String fontName, short fontColor,
+                                               short bgColor, boolean isBold, boolean wrapText, short alignment) {
+
+        logger.debug("creating styled row with cols >> rowIndex : [{}]", rowIndex);
+
+        // Create font
+        XSSFFont font = workbook.createFont();
+        font.setFontHeightInPoints(fontSize);
+        font.setColor(fontColor);
+        font.setFontName(fontName);
+        font.setBold(isBold);
+
+        // Create style
+        CellStyle style = workbook.createCellStyle();
+        style.setFont(font);
+        style.setFillForegroundColor(bgColor);
+        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        style.setWrapText(wrapText);
+        style.setAlignment(alignment);
+        style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+
+        style.setBorderTop(CellStyle.BORDER_THIN);
+        style.setBorderLeft(CellStyle.BORDER_THIN);
+        style.setBorderRight(CellStyle.BORDER_THIN);
+        style.setBorderBottom(CellStyle.BORDER_THIN);
+
+        logger.debug("cellName [{}], cellValue : [{}]", cellName, cellValue);
+        // Create row and cell
+        Row row = sheet.createRow(rowIndex);
+        Cell cell1 = row.createCell(startCol);
+        cell1.setCellValue(cellName);
+        cell1.setCellStyle(style);
+
+        // Merge first 5 columns
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, startCol, startCol + 4));
+
+        // Create the 6th column as a single cell
+        Cell cell6 = row.createCell(startCol + 5);
+        cell6.setCellValue(cellValue);
+        cell6.setCellStyle(style);
+
+        // Merge the remaining columns after the 4th column
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, startCol + 6, endCol));  // Merges remaining columns
+
+        // Apply styles to the merged cells
+        for (int colIndex = startCol; colIndex <= endCol; colIndex++) {
+            if (colIndex != startCol && colIndex != startCol + 5) {  // Skip cell1 and cell6
+                Cell cell = row.createCell(colIndex);
+                cell.setCellStyle(style);
+            }
+        }
+
+    }
+
+    private static double getGoodsValueTotal(List<DispatchReport> dispRepDataList) {
+        logger.debug("getting total goods value..");
+        if (dispRepDataList == null || dispRepDataList.isEmpty()) {
+            return 0.0;
+        }
+
+        double total = 0;
+        for (DispatchReport dispRepData : dispRepDataList) {
+            double goodsValue = dispRepData.getGoodsValue();
+            total += goodsValue;
+        }
+
+        logger.debug("Total goods values [{}]", total);
+        return total;
     }
 
 }
