@@ -125,6 +125,8 @@ public class DispatchRegisterExcelService {
             short dateFormat = workbook.createDataFormat().getFormat("dd/MM/yyyy");
             dateStyle.setDataFormat(dateFormat);
             dateStyle.setFont(cellFont);
+            dateStyle.setAlignment(CellStyle.ALIGN_LEFT);
+
             dateStyle.setBorderTop(CellStyle.BORDER_THIN);
             dateStyle.setBorderLeft(CellStyle.BORDER_THIN);
             dateStyle.setBorderRight(CellStyle.BORDER_THIN);
@@ -370,6 +372,11 @@ public class DispatchRegisterExcelService {
         style.setWrapText(wrapText);
         style.setAlignment(alignment);
         style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+
+        style.setBorderTop(CellStyle.BORDER_THIN);
+        style.setBorderLeft(CellStyle.BORDER_THIN);
+        style.setBorderRight(CellStyle.BORDER_THIN);
+        style.setBorderBottom(CellStyle.BORDER_THIN);
 
         // Create row and cell
         Row row = sheet.createRow(rowIndex);
