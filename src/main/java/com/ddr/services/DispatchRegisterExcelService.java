@@ -34,7 +34,7 @@ public class DispatchRegisterExcelService {
         DispatchRegisterDTO dto = new DispatchRegisterDTO();
         dto.setBranch("10");
         dto.setStockPoint("10");
-        dto.setDivision("0");
+        dto.setDivision("327");
         dto.setStartDate("01/04/2023");
         dto.setEndDate("31/03/2024");
         dto.setCustomer("0");
