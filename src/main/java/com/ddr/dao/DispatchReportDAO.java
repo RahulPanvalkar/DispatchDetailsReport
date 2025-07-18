@@ -39,6 +39,8 @@ public class DispatchReportDAO {
             stmt.setString(10, "N"); // DETAILED
             stmt.setString(11, "10"); // STOCKPOINTID*/
 
+            String finYearFlag = dto.getStartDate();
+
             stmt.setString(2, "CURRENT"); // FIN_YR_FLAG -- CURRENT/PREVIOUS
             stmt.setInt(3, Integer.parseInt(dto.getFinancialYear()));   // FINYR_ID
             stmt.setString(4, "SNK"); // COMP_CD

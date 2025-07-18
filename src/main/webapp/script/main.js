@@ -228,7 +228,9 @@ $(document).ready(function() {
             $('#financialYear').append(
                 $('<option>', {
                     value: financialYear.fin_year_id,
-                    text: `${financialYear.start_dt} To ${financialYear.end_dt}`
+                    text: `${financialYear.start_dt} To ${financialYear.end_dt}`,
+                    'data-start': financialYear.start_dt,
+                    'data-end': financialYear.end_dt
                 })
             );
         });
@@ -460,7 +462,7 @@ $(document).ready(function() {
         if (!division) {
             $("#divisionCheck").show().html("Division is required");
             return false;
-        } else if (!regex.test(division) || division === '0') {
+        } else if (!regex.test(division)) {
             $("#divisionCheck").show();
             $("#divisionCheck").html("Invalid division");
             //$("#branch").html("");
@@ -538,6 +540,20 @@ $(document).ready(function() {
             return false;
         }
 
+        let selectedOption = $("#financialYear").find(":selected");
+        let finStart = selectedOption.data("start"); // e.g., "01/04/2024"
+        let finEnd = selectedOption.data("end");     // e.g., "31/03/2025"
+        console.log("finStart >> ",finStart, " :: finEnd >> ",finEnd);
+
+        let startDDt = parseDateString(startDate);
+        let finStartDate = parseDateString(finStart);
+        let finEndDate = parseDateString(finEnd);
+
+        if (startDDt < finStartDate || startDDt > finEndDate) {
+            $("#startDtCheck").show().html("Start date is outside selected financial year.");
+            return false;
+        }
+
         $("#startDtCheck").hide();
         return true;
     }
@@ -565,6 +581,20 @@ $(document).ready(function() {
              $("#endDtCheck").html("Invalid End date format");
              $("#endDate").html("");
              return false;
+        }
+
+        let selectedOption = $("#financialYear").find(":selected");
+        let finStart = selectedOption.data("start"); // e.g., "01/04/2024"
+        let finEnd = selectedOption.data("end");     // e.g., "31/03/2025"
+        console.log("validateEndDate >> finStart >> ",finStart, " :: finEnd >> ",finEnd);
+
+        let endDDt = parseDateString(endDate);
+        let finStartDate = parseDateString(finStart);
+        let finEndDate = parseDateString(finEnd);
+
+        if (endDDt < finStartDate || endDDt > finEndDate) {
+            $("#endDtCheck").show().html("End date is outside selected financial year.");
+            return false;
         }
 
         $("#endDtCheck").hide();

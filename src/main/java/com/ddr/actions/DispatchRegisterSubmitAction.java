@@ -34,13 +34,18 @@ public class DispatchRegisterSubmitAction extends ActionSupport {
     }
 
     public String getDispatchDataFromSession() throws Exception {
+        logger.debug("getting dispatch data from session");
+
         Map<String, Object> session = ActionContext.getContext().getSession();
+
         // Check if the session contains the "dispatch_data" key
-        if (session != null && session.containsKey("dispatch_data")) {
-            result = (Map<String, Object>) session.get("dispatch_data");
-        } else {
+        if (session == null && !session.containsKey("dispatch_data")) {
+            logger.error("session is null or does not contain key");
             result = new HashMap<>();
+            return ERROR;
         }
+
+        result = (Map<String, Object>) session.get("dispatch_data");
         return SUCCESS;
     }
 

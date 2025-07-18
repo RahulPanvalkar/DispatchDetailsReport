@@ -22,13 +22,19 @@ public class DispatchRegisterExcelService {
 
     private static final Logger logger = LoggerUtil.getLogger(DispatchRegisterExcelService.class);
 
+    private static int currentRow = 0;
+
+    private static final String[] headers = {"TRANSACTION NO", "DISPATCH DATE", "PARTY", "DESTINATION", "TRANSPORTER", "GOODS VALUE",
+            "INVOICE NO", "LR NO", "DRIVER NAME", "LORRY NUMBER", "LR DATE", "DISPATCH DELAY", "NO OF CASES",
+            "FORM NUM", "C FORM DATE", "C FORM VALUE", "POD DATE", "POD NUMBER", "REASON"};
+
     public static void main(String[] args) {
         //DownloadService service = new DownloadService();
         String filePath = "D:\\RAHUL\\TASK\\Dispatch details report summary\\DispatchDetailsReport\\module-resource\\Dispatch-Register-Summary.xlsx";
         DispatchRegisterDTO dto = new DispatchRegisterDTO();
         dto.setBranch("10");
         dto.setStockPoint("10");
-        dto.setDivision("327");
+        dto.setDivision("0");
         dto.setStartDate("01/04/2023");
         dto.setEndDate("31/03/2024");
         dto.setCustomer("0");
@@ -70,7 +76,7 @@ public class DispatchRegisterExcelService {
             addDispatchDataInFile(filePath, dispRegList, compName, locationName, finYearRange, division);
 
             // after successful update return file path for downloading
-            // return filePath;
+             // return filePath;
         } catch (Exception e) {
             logger.error("Exception occurred in updateFileData :: ", e);
         }
@@ -103,17 +109,19 @@ public class DispatchRegisterExcelService {
             }
 
             String title = "Dispatch Register Summary Report From : " + finYearRange;
-            createTitleRow(workbook, xssfSheet, compName.toUpperCase(), headerLength, 0);
-            createTitleRow(workbook, xssfSheet, locationName.toUpperCase(), headerLength, 1);
-            createTitleRow(workbook, xssfSheet, title, headerLength, 2);
+            createTitleRow(workbook, xssfSheet, compName.toUpperCase(), headerLength, currentRow);  // rowNo = 0
+            createTitleRow(workbook, xssfSheet, locationName.toUpperCase(), headerLength, ++currentRow); // rowNo = 1
+            createTitleRow(workbook, xssfSheet, title, headerLength, ++currentRow); // rowNo = 2
 
             // Create Header Row
-            createHeaderRow(workbook, xssfSheet, headers, 3);
+            createHeaderRow(workbook, xssfSheet, headers, ++currentRow); // rowNo = 3
 
             // Create custom styled row to show Division
-            createStyledRow(workbook, xssfSheet, 4, division, 0, headerLength - 1,
+            createStyledRow(workbook, xssfSheet, ++currentRow, division, 0, headerLength - 1,
                     (short) 9, "Arial", IndexedColors.BLACK.getIndex(), IndexedColors.LIGHT_CORNFLOWER_BLUE.index,
                     true, false, CellStyle.ALIGN_LEFT);
+
+            xssfSheet.createFreezePane(0, 5);
 
             // font style for body
             Font cellFont = (XSSFFont) workbook.createFont();
@@ -143,11 +151,11 @@ public class DispatchRegisterExcelService {
 
             BigDecimal goodsValueTotal = BigDecimal.ZERO;
 
-            int rowNum = 4;
+            // body from row = 4;
             for (DispatchReport dispReg : dispRegList) {
-                ++rowNum;
+                ++currentRow;
 
-                Row row = xssfSheet.createRow(rowNum);
+                Row row = xssfSheet.createRow(currentRow);
 
                 Cell cell0 = row.createCell(0);
                 cell0.setCellValue(dispReg.getDspTrnNo());
@@ -244,13 +252,13 @@ public class DispatchRegisterExcelService {
 
             // Create custom styled row to show Division
             String divisionTotal = "Division Total : ";
-            createStyledRowWithCols(workbook, xssfSheet, ++rowNum, divisionTotal, goodsValueTotal, 0, headerLength - 1,
+            createStyledRowWithCols(workbook, xssfSheet, ++currentRow, divisionTotal, goodsValueTotal, 0, headerLength - 1,
                     (short) 9, "Arial", IndexedColors.BLACK.getIndex(), IndexedColors.LIGHT_CORNFLOWER_BLUE.index,
                     false, false, CellStyle.ALIGN_LEFT);
 
             // Create custom styled row to show Division
             String grandTotal = "Grand Total : ";
-            createStyledRowWithCols(workbook, xssfSheet, ++rowNum, grandTotal, goodsValueTotal, 0, headerLength - 1,
+            createStyledRowWithCols(workbook, xssfSheet, ++currentRow, grandTotal, goodsValueTotal, 0, headerLength - 1,
                     (short) 9, "Arial", IndexedColors.BLACK.getIndex(), IndexedColors.LIGHT_CORNFLOWER_BLUE.index,
                     false, false, CellStyle.ALIGN_LEFT);
 
@@ -275,6 +283,172 @@ public class DispatchRegisterExcelService {
 //
 //            // Return for download
 //            return new ByteArrayInputStream(bos.toByteArray());
+
+        } catch (Exception e) {
+            logger.error("Exception occurred in addDispatchDataInFile :: ", e);
+        }
+        //return null;
+    }
+
+    private static void addDispatchDataInFileForAllDivision(XSSFWorkbook workbook, XSSFSheet xssfSheet, DispatchRegisterDTO registerDTO, String locationName, String finYearRange, String division) {
+        try {
+
+            // getting DispatchRegister list
+            List<DispatchReport> dispRegList = dispatchReportDAO.callDispatchRegisterProcedure(registerDTO);
+
+
+            int headerLength = headers.length;
+
+            // Create custom styled row to show Division
+            createStyledRow(workbook, xssfSheet, ++currentRow, division, 0, headerLength - 1,
+                    (short) 9, "Arial", IndexedColors.BLACK.getIndex(), IndexedColors.LIGHT_CORNFLOWER_BLUE.index,
+                    true, false, CellStyle.ALIGN_LEFT);
+
+            xssfSheet.createFreezePane(0, 5);
+
+            // font style for body
+            Font cellFont = (XSSFFont) workbook.createFont();
+            cellFont.setFontName("Arial");
+            cellFont.setFontHeightInPoints((short) 9);
+
+            // date cell style
+            CellStyle dateStyle = workbook.createCellStyle();
+            short dateFormat = workbook.createDataFormat().getFormat("dd/MM/yyyy");
+            dateStyle.setDataFormat(dateFormat);
+            dateStyle.setFont(cellFont);
+            dateStyle.setAlignment(CellStyle.ALIGN_LEFT);
+
+            dateStyle.setBorderTop(CellStyle.BORDER_THIN);
+            dateStyle.setBorderLeft(CellStyle.BORDER_THIN);
+            dateStyle.setBorderRight(CellStyle.BORDER_THIN);
+            dateStyle.setBorderBottom(CellStyle.BORDER_THIN);
+
+            // Data cell style
+            CellStyle dataStyle = workbook.createCellStyle();
+            dataStyle.setFont(cellFont);
+            dataStyle.setFillForegroundColor(IndexedColors.WHITE.getIndex());
+            dataStyle.setBorderTop(CellStyle.BORDER_THIN);
+            dataStyle.setBorderLeft(CellStyle.BORDER_THIN);
+            dataStyle.setBorderRight(CellStyle.BORDER_THIN);
+            dataStyle.setBorderBottom(CellStyle.BORDER_THIN);
+
+            BigDecimal goodsValueTotal = BigDecimal.ZERO;
+
+            // body from row = 4;
+            for (DispatchReport dispReg : dispRegList) {
+                ++currentRow;
+
+                Row row = xssfSheet.createRow(currentRow);
+
+                Cell cell0 = row.createCell(0);
+                cell0.setCellValue(dispReg.getDspTrnNo());
+                cell0.setCellStyle(dataStyle);
+
+                Cell cell1 = row.createCell(1);
+                if (dispReg.getDspDt() != null) {
+                    cell1.setCellValue(java.sql.Date.valueOf(dispReg.getDspDt()));
+                }
+                cell1.setCellStyle(dateStyle);
+
+                Cell cell2 = row.createCell(2);
+                cell2.setCellValue(dispReg.getCustName());
+                cell2.setCellStyle(dataStyle);
+
+                Cell cell3 = row.createCell(3);
+                cell3.setCellValue(dispReg.getDestination());
+                cell3.setCellStyle(dataStyle);
+
+                Cell cell4 = row.createCell(4);
+                cell4.setCellValue(dispReg.getTransporter());
+                cell4.setCellStyle(dataStyle);
+
+                Cell cell5 = row.createCell(5);
+                if (dispReg.getGoodsValue() != null) {
+                    cell5.setCellValue(dispReg.getGoodsValue().doubleValue());
+                    // to get total value of goods
+                    goodsValueTotal = goodsValueTotal.add(dispReg.getGoodsValue());
+                }
+                cell5.setCellStyle(dataStyle);
+
+                Cell cell6 = row.createCell(6);
+                cell6.setCellValue(dispReg.getInvNo());
+                cell6.setCellStyle(dataStyle);
+
+                Cell cell7 = row.createCell(7);
+                cell7.setCellValue(dispReg.getLrNum());
+                cell7.setCellStyle(dataStyle);
+
+                Cell cell8 = row.createCell(8);
+                cell8.setCellValue(dispReg.getDriverName());
+                cell8.setCellStyle(dataStyle);
+
+                Cell cell9 = row.createCell(9);
+                cell9.setCellValue(dispReg.getLorryNo());
+                cell9.setCellStyle(dataStyle);
+
+                Cell cell10 = row.createCell(10);
+                if (dispReg.getLrDate() != null) {
+                    cell10.setCellValue(java.sql.Date.valueOf(dispReg.getLrDate()));
+                }
+                cell10.setCellStyle(dateStyle);
+
+                Cell cell11 = row.createCell(11);
+                cell11.setCellValue(dispReg.getDelayDays());
+                cell11.setCellStyle(dataStyle);
+
+                Cell cell12 = row.createCell(12);
+                cell12.setCellValue(dispReg.getNoOfCases());
+                cell12.setCellStyle(dataStyle);
+
+                Cell cell13 = row.createCell(13);
+                cell13.setCellValue(dispReg.getFormNum());
+                cell13.setCellStyle(dataStyle);
+
+                Cell cell14 = row.createCell(14);
+                if (dispReg.getcFormDate() != null) {
+                    cell14.setCellValue(java.sql.Date.valueOf(dispReg.getcFormDate()));
+                }
+                cell14.setCellStyle(dateStyle);
+
+                Cell cell15 = row.createCell(15);
+                cell15.setCellValue(dispReg.getcFormValue());
+                cell15.setCellStyle(dataStyle);
+
+                Cell cell16 = row.createCell(16);
+                if (dispReg.getPodDate() != null) {
+                    cell16.setCellValue(java.sql.Date.valueOf(dispReg.getPodDate()));
+                }
+                cell16.setCellStyle(dateStyle);
+
+                Cell cell17 = row.createCell(17);
+                cell17.setCellValue(dispReg.getPodNum());
+                cell17.setCellStyle(dataStyle);
+
+                Cell cell18 = row.createCell(18);
+                cell18.setCellValue(dispReg.getPodReason());
+                cell18.setCellStyle(dataStyle);
+
+            }
+
+
+            // Create custom styled row to show Division
+            String divisionTotal = "Division Total : ";
+            createStyledRowWithCols(workbook, xssfSheet, ++currentRow, divisionTotal, goodsValueTotal, 0, headerLength - 1,
+                    (short) 9, "Arial", IndexedColors.BLACK.getIndex(), IndexedColors.LIGHT_CORNFLOWER_BLUE.index,
+                    false, false, CellStyle.ALIGN_LEFT);
+
+            // Create custom styled row to show Division
+            String grandTotal = "Grand Total : ";
+            createStyledRowWithCols(workbook, xssfSheet, ++currentRow, grandTotal, goodsValueTotal, 0, headerLength - 1,
+                    (short) 9, "Arial", IndexedColors.BLACK.getIndex(), IndexedColors.LIGHT_CORNFLOWER_BLUE.index,
+                    false, false, CellStyle.ALIGN_LEFT);
+
+
+            // to set column size to auto
+            for (int i = 0; i < headers.length; i++) {
+                xssfSheet.autoSizeColumn(i);
+            }
+
 
         } catch (Exception e) {
             logger.error("Exception occurred in addDispatchDataInFile :: ", e);

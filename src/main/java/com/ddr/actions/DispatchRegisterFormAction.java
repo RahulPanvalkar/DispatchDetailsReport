@@ -1,7 +1,10 @@
 package com.ddr.actions;
 
+import com.ddr.model.DispatchRegisterDTO;
 import com.ddr.services.DispatchRegisterFormService;
+import com.ddr.services.DispatchRegisterSubmitService;
 import com.ddr.util.LoggerUtil;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.logging.log4j.Logger;
 
@@ -21,7 +24,10 @@ public class DispatchRegisterFormAction extends ActionSupport {
 
     private int finYearId;
 
-    private List<String> reportTypeList;
+    private DispatchRegisterDTO dto;
+    private String message;
+    private boolean success;
+    private boolean error;
 
     @Override
     public String execute() {
@@ -61,10 +67,31 @@ public class DispatchRegisterFormAction extends ActionSupport {
             }
         }
 
-        logger.debug("result >> {}", this.result);
         return SUCCESS;
     }
 
+    public String submit() throws Exception {
+        logger.debug("submit method called..");
+
+        // get dispatch data using stored procedure from service
+        DispatchRegisterSubmitService service = new DispatchRegisterSubmitService();
+        result = service.getDispatchReportData(this.dto);
+
+        if (result == null || result.get("success") == null) {
+            error = true;
+            message = "Something went wrong!";
+            return ERROR;
+        } else if (!(Boolean) result.get("success")) {
+            error = true;
+            message = (String) result.get("message");
+             return ERROR;
+        }
+
+        // stored it in session
+        ActionContext.getContext().getSession().put("dispatch_data", result);
+
+        return SUCCESS;
+    }
 
     public void setType(String type) {
         this.type = type;
@@ -76,6 +103,38 @@ public class DispatchRegisterFormAction extends ActionSupport {
 
     public void setFinYearId(int finYearId) {
         this.finYearId = finYearId;
+    }
+
+    public DispatchRegisterDTO getDto() {
+        return dto;
+    }
+
+    public void setDto(DispatchRegisterDTO dto) {
+        this.dto = dto;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public boolean isError() {
+        return error;
+    }
+
+    public void setError(boolean error) {
+        this.error = error;
     }
 }
 
