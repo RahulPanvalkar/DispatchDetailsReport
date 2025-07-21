@@ -8,6 +8,13 @@
 		<title>Dispatch Register</title>
 		<meta name='viewport' content='width=device-width, initial-scale=1'>
         <%@include file="./header.jsp" %>
+        <script src="${pageContext.request.contextPath}/script/main.js"></script>
+        <script>
+            $(document).ready(function() {
+                console.log("makeAjaxRequest:", typeof makeAjaxRequest);
+                //makeAjaxRequest("get-data?type=default", handleDefaultDataList);
+            });
+        </script>
 	</head>
 	<body>
 	    <!-- alert message -->

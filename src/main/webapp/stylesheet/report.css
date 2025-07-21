@@ -1,0 +1,156 @@
+:root {
+    --pestal-medium-blue: rgb(142, 170, 218);
+    --pestal-light-blue: rgb(219, 229, 241);
+    --light-cornflower-blue: rgb(198, 217, 241);
+    --aqua-blue: rgb(145, 206, 218);
+    --sea-blue: rgb(48, 133, 154);
+    --pestal-teal-blue: rgb(49, 123, 141);
+    --pestal-medium-light-blue: rgb(141, 171, 217);
+    --cyan-blue: rgb(48, 133, 154);
+    --white: rgb(255, 255, 255);
+    --antiquewhite: rgb(238, 236, 224);
+    --beige: rgb(238, 236, 224);
+    --lavender-gray: rgb(227, 221, 232);
+    --yellow: rgb(254, 217, 102);
+    --light-yellow: rgb(253, 240, 221);
+    --pastel-green: rgb(197, 224, 180);
+    --baby-pink: rgb(229, 223, 235);
+    --red: rgb(229, 183, 187);
+    --light-gray: rgb(224, 224, 224);
+    --lighter-gray: rgb(242, 242, 242);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+/*-- SUMMARY REPORT PAGE --*/
+body {
+    font-family: Arial, sans-serif;
+    margin: 1.25rem;
+    font-size: 0.8rem;
+}
+
+.main-div {
+    border: 1px solid var(--c-primary-dark);
+    padding: 1rem;
+}
+
+.header, .sub-header {
+    text-align: center;
+}
+
+.header h2, h3, .sub-header p {
+    margin-block: 0.5rem;
+}
+
+.date-time {
+    float: left;
+}
+
+.financial-year {
+    float: right;
+}
+
+.btn {
+    padding: 0.35rem 1rem;
+    background: var(--c-btn-bg);
+    color: var(--c-white);
+    border-radius: 0.2rem;
+    margin-top: 0.5rem;
+}
+
+.btn-right {
+    text-align: right !important;
+}
+
+.report-container {
+    margin-top: 0.35rem;
+    overflow: hidden;
+}
+
+.division-label {
+    background-color: var(--light-yellow);
+    padding-block: 0.2rem;
+    padding-left: 0.2rem;
+    border-inline: 0.1px solid #aaa;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.outer-tbl-tr, .inner-tbl-tr {
+    padding: 0;
+}
+
+.outer-tbl-td {
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+
+.inner-tbl-tr th,
+.inner-tbl-tr td {
+    border: 1px solid #aaa;
+    padding: 0.2rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    background-color: white;
+}
+
+
+.inner-tbl-tr th {
+    background-color: var(--light-gray);
+    padding: 0.8rem 0.5rem;
+    color: var(--c-primary);
+}
+
+#download {
+    display: flex;
+    align-self: end;
+    cursor: pointer;
+}
+
+#download img{
+    width: 1.35rem;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.fixed-table {
+    border-collapse: collapse;
+    width: max-content;
+    min-width: 100%;
+    table-layout: fixed;
+}
+
+
+.fixed {
+    max-height: 25vh;
+    overflow-y: auto;
+}
+
+.fixed table tbody::-webkit-scrollbar:vertical,
+.fixed::-webkit-scrollbar:vertical {
+    display: none;
+}
+
+.scroll-header, .scroll-body{
+    max-width: calc(100% - 17.5%);
+    max-height: 25vh;
+    overflow: auto;
+}
+
+
+/* hide header row scrollbar */
+.scroll-header::-webkit-scrollbar {
+  display: none;                 /* Chrome, Safari, Opera */
+}

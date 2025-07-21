@@ -5,11 +5,7 @@ $(document).ready(function() {
     $(".datePicker").datepicker({
         changeMonth: true,
         changeYear: true,
-        //yearRange: "-100:-18", // to select from 100 to 18 years ago
-        dateFormat: "dd/mm/yy",
-        //defaultDate: "-18y",   // default position to 18 years ago
-        //maxDate: "-18Y",       // Max date is 18 years ago
-        //minDate: "-100Y"       // Min date is 100 years ago
+        dateFormat: "dd/mm/yy"
     });
 
     // GENERIC FUNCTION TO SEND AJAX REQUEST
@@ -344,13 +340,6 @@ $(document).ready(function() {
         // if isAllValid is false disable submit button
         toggleSubmitBtn(isAllValid);
     }
-
-    checkErrors(errors);
-
-    $('#submit-btn').on('click', function(event) {
-        //event.preventDefault();
-        console.log("submit button clicked::", event.target.id);
-    });
 
 
     // Validate branch

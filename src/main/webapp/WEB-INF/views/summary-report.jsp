@@ -6,138 +6,111 @@
 		<title>Summary Report</title>
 		<meta name='viewport' content='width=device-width, initial-scale=1'>
 		<%@include file="./header.jsp" %>
-		<script src="${pageContext.request.contextPath}/script/table.js"></script>
-        <link rel='stylesheet' type='text/css' media='screen' href='${pageContext.request.contextPath}/stylesheet/table.css'>
+		<script src="${pageContext.request.contextPath}/script/report.js"></script>
+        <link rel='stylesheet' type='text/css' media='screen' href='${pageContext.request.contextPath}/stylesheet/report.css'>
 	</head>
 	<body>
-        <h1>Dispatch Register Summary</h1>
+	    <main class="main-div">
+            <div class="header">
+                <h2>HEALTHCARE PVT LTD.</h2>
+                <h3>HEALTHCARE LTD-BHIW</h3>
+            </div>
 
-            <!-- Table to Display Data -->
-           <table id="dispatch-outer-table" border="1">
-               <!-- Row for header tables -->
-               <tr>
-                   <td>
-                       <!-- Header Table 1 -->
-                       <table border="1">
-                           <thead>
-                               <tr>
-                                   <th>TRANSACTION NO</th>
-                                   <th>DISPATCH DATE</th>
-                                   <th>PARTY</th>
-                               </tr>
-                           </thead>
-                       </table>
-                   </td>
-                   <td>
-                       <!-- Header Table 2 -->
-                       <table border="1">
-                           <thead>
-                               <tr>
-                                   <th>DESTINATION</th>
-                                   <th>TRANSPORTER</th>
-                                   <th>GOODS VALUE</th>
-                                   <th>INVOICE NO</th>
-                                   <th>LR NO</th>
-                                   <th>DRIVER NAME</th>
-                                   <th>LORRY NUMBER</th>
-                                   <th>LR DATE</th>
-                                   <th>DISPATCH DELAY</th>
-                                   <th>NO OF CASES</th>
-                                   <th>FORM NUM</th>
-                                   <th>C FORM DATE</th>
-                                   <th>C FORM VALUE</th>
-                                   <th>POD DATE</th>
-                                   <th>POD NUMBER</th>
-                                   <th>REASON</th>
-                               </tr>
-                           </thead>
-                       </table>
-                   </td>
-               </tr>
+            <div class="sub-header">
+                <p><strong>Dispatch Register Summary Report From:</strong> 01/04/2023 To 31/03/2024</p>
+            </div>
 
-               <!-- Row for value tables -->
-               <tr>
-                   <td>
-                       <!-- Value Table 1 -->
-                       <table border="1" id="value-table-1">
-                           <tbody>
-                               <!-- JS inserts 3 values here -->
-                           </tbody>
-                       </table>
-                   </td>
-                   <td>
-                       <!-- Value Table 2 -->
-                       <table border="1" id="value-table-2">
-                           <tbody>
-                               <!-- JS inserts remaining 16 values here -->
-                           </tbody>
-                       </table>
-                   </td>
-               </tr>
-           </table>
+            <div class="date-time">Report Date: 01/10/2024 Time: 6:07:48 PM</div>
+            <div class="financial-year">Financial Year From 01/04/2023 To 31/03/2024</div>
 
-           <button id="load-data-btn">Load Dispatch Data</button>
+            <div style="clear: both;"></div>
 
-            <script>
-                $("#load-data-btn").click(function () {
-                    const data = {
-                        transactionNo: "TR001",
-                        dispatchDate: "18/07/2025",
-                        party: "ABC Ltd",
+            <div class="buttons">
+                <button  class="btn" onclick="history.back()">Back</button>
+                <span id="download">
+                    <img src="${pageContext.request.contextPath}/images/excel_icon.png" alt="download" />
+                </span>
+            </div>
 
-                        destination: "Mumbai",
-                        transporter: "XYZ Transport",
-                        goodsValue: "₹50,000",
-                        invoiceNo: "INV1234",
-                        lrNo: "LR5678",
-                        driverName: "John Doe",
-                        lorryNumber: "MH12AB1234",
-                        lrDate: "19/07/2025",
-                        dispatchDelay: "2 Days",
-                        noOfCases: 10,
-                        formNum: "F123",
-                        cFormDate: "20/07/2025",
-                        cFormValue: "₹50,000",
-                        podDate: "25/07/2025",
-                        podNumber: "POD789",
-                        reason: "Heavy Rain"
-                    };
+            <div class="report-container">
 
-                    // First 3 values
-                    const values1 = `
-                        <tr>
-                            <td>${data.transactionNo}</td>
-                            <td>${data.dispatchDate}</td>
-                            <td>${data.party}</td>
-                        </tr>
-                    `;
-                    $("#value-table-1 tbody").html(values1);
+                <!-- Header Tables -->
+                <table class="outer-tbl"  cellspacing="0" cellpadding="0">
+                    <tr class="outer-tbl-tr">
+                        <td class="outer-tbl-td">
+                            <div class="fixed">
+                                <table class="inner-tbl fixed-table">
+                                    <thead>
+                                        <tr class="inner-tbl-tr">
+                                            <th>TRANSACTION NO</th>
+                                            <th>DISPATCH DATE</th>
+                                            <th>PARTY</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="scroll-header fixed"  style="overflow-y: scroll;">
+                                <table class="inner-tbl">
+                                    <thead>
+                                        <tr class="inner-tbl-tr">
+                                            <th>DESTINATION</th>
+                                            <th>TRANSPORTER</th>
+                                            <th>GOODS VALUE</th>
+                                            <th>INVOICE NO</th>
+                                            <th>LR NO</th>
+                                            <th>DRIVER NAME</th>
+                                            <th>LORRY NUMBER</th>
+                                            <th>LR DATE</th>
+                                            <th>DISPATCH DELAY</th>
+                                            <th>NO OF CASES</th>
+                                            <th>FORM NUM</th>
+                                            <th>C FORM DATE</th>
+                                            <th>C FORM VALUE</th>
+                                            <th>POD DATE</th>
+                                            <th>POD NUMBER</th>
+                                            <th>REASON</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
 
-                    // Remaining 16 values
-                    const values2 = `
-                        <tr>
-                            <td>${data.destination}</td>
-                            <td>${data.transporter}</td>
-                            <td>${data.goodsValue}</td>
-                            <td>${data.invoiceNo}</td>
-                            <td>${data.lrNo}</td>
-                            <td>${data.driverName}</td>
-                            <td>${data.lorryNumber}</td>
-                            <td>${data.lrDate}</td>
-                            <td>${data.dispatchDelay}</td>
-                            <td>${data.noOfCases}</td>
-                            <td>${data.formNum}</td>
-                            <td>${data.cFormDate}</td>
-                            <td>${data.cFormValue}</td>
-                            <td>${data.podDate}</td>
-                            <td>${data.podNumber}</td>
-                            <td>${data.reason}</td>
-                        </tr>
-                    `;
-                    $("#value-table-2 tbody").html(values2);
-                });
-            </script>
+                    <tr class="outer-tbl-tr">
+                        <td class="outer-tbl-td fixed-table"> <div class="division-label">Division : MAIN</div></td>
+                        <td class="outer-tbl-td"> <div class="division-label  scroll-header"><span>&nbsp;</span></div></td>
+                    </tr>
 
+                    <!-- Data Row Tables -->
+                    <tr class="outer-tbl-tr">
+                        <td class="outer-tbl-td">
+                            <div class="fixed" style="overflow-x: scroll;">
+                                <table id="value-table-1" class="inner-tbl fixed-table">
+                                    <tbody>
+                                        <!-- Dynamically populated using jQuery -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                        <td class="outer-tbl-td">
+                            <div class="scroll-body">
+                                <table id="value-table-2" class="inner-tbl">
+                                    <tbody>
+                                        <!-- Dynamically populated using jQuery -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="btn-right">
+                <button class="btn">Exit</button>
+            </div>
+        </main>
 
 	</body>
 </html>
