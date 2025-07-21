@@ -2,101 +2,85 @@
 
 
    $(document).ready(function () {
-       let fixedRow = "", scrollRow = "";
-       console.log("rows : ", rows);
 
-       rows.forEach(row => {
-           fixedRow += `
-               <tr class='inner-tbl-tr'>
-                   <td>${row.transactionNo}</td>
-                   <td>${row.dispatchDate}</td>
-                   <td>${row.party}</td>
-               </tr>
-           `;
+    // GENERIC FUNCTION TO SEND AJAX REQUEST
+        function makeAjaxRequest(URL, callback) {
+            console.log("sending ajax request to >> [",URL,"]");
+            $.ajax({
+                url: URL,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    //console.log("makeAjaxRequest >> response >> ", response);
+                    callback(response);
+                },
+                error: function(jqXhr, textStatus, errorMessage) {
+                    console.error("Error occurred: ", errorMessage);
+                    callback([]);
+                }
+            });
+        }
 
-           scrollRow += `
-               <tr class='inner-tbl-tr'>
-                   <td>${row.destination}</td>
-                   <td>${row.transporter}</td>
-                   <td>${row.goodsValue}</td>
-                   <td>${row.invoiceNo}</td>
-                   <td>${row.lrNo}</td>
-                   <td>${row.driverName}</td>
-                   <td>${row.lorryNumber}</td>
-                   <td>${row.lrDate}</td>
-                   <td>${row.dispatchDelay}</td>
-                   <td>${row.noOfCases}</td>
-                   <td>${row.formNum}</td>
-                   <td>${row.cFormDate}</td>
-                   <td>${row.cFormValue}</td>
-                   <td>${row.podDate}</td>
-                   <td>${row.podNumber}</td>
-                   <td>${row.reason}</td>
-               </tr>
-           `;
-       });
+        // get register data
+        makeAjaxRequest("dispatch-register-data", handleDispatchReportData);
 
-       $("#value-table-1 tbody").html(fixedRow);
-       $("#value-table-2 tbody").html(scrollRow);
-   });
+        // function to handle the ajax response and populate table with data
+        function handleDispatchReportData(response) {
+            console.log("handleDispatchReportData >> response >> ", response);
+
+            // Ensure data is present
+            if (!response.data || response.data.length === 0) {
+                $("#value-table-1 tbody").html("<tr><td colspan='3'>No data available</td></tr>");
+                $("#value-table-2 tbody").html("<tr><td colspan='16'>No data available</td></tr>");
+                return;
+            }
+
+            let fixedRow = "", scrollRow = "";
+
+            response.data.forEach(row => {
+                fixedRow += `
+                    <tr class='inner-tbl-tr'>
+                        <td>${row.dspTrnNo}</td>
+                        <td>${row.dspDtStr || ''}</td>
+                        <td>${row.custName}</td>
+                    </tr>
+                `;
+
+                scrollRow += `
+                    <tr class='inner-tbl-tr'>
+                        <td>${row.destination}</td>
+                        <td>${row.transporter}</td>
+                        <td>${row.goodsValue}</td>
+                        <td>${row.invNo}</td>
+                        <td>${row.lrNum}</td>
+                        <td>${row.driverName}</td>
+                        <td>${row.lorryNo}</td>
+                        <td>${row.lrDateStr || ''}</td>
+                        <td>${row.delayDays}</td>
+                        <td>${row.noOfCases}</td>
+                        <td>${row.formNum}</td>
+                        <td>${row.cFormDate || ''}</td>
+                        <td>${row.cFormValue}</td>
+                        <td>${row.podDateStr || ''}</td>
+                        <td>${row.podNum}</td>
+                        <td>${row.podReason}</td>
+                    </tr>
+                `;
+            });
+
+            $("#value-table-1 tbody").html(fixedRow);
+            $("#value-table-2 tbody").html(scrollRow);
+        }
 
 
-// When body scrolls, sync the header
-$('.scroll-body').on('scroll', function () {
-    console.log("scroll event triggerred..");
-    $('.scroll-header').scrollLeft($(this).scrollLeft());
 });
 
-
-
-// function to handle the dispatch data
-function handleDispatchReportData(response) {
-    console.log("handleDispatchReportData >> response >> ", response);
-
-    // Clear existing table data
-    $('#dispatch-table tbody').empty();
-
-    // Check if there's data in the response
-    if (response.data && response.data.length > 0) {
-        // Loop through the response data and append rows to the table
-        $.each(response.data, function(index, dispatch) {
-            var row = '<tr>';
-            row += '<td>' + dispatch.dspTrnNo + '</td>';
-            row += '<td>' + (dispatch.dspDt ? dispatch.dspDt : '') + '</td>';
-            row += '<td>' + dispatch.custName + '</td>';
-            row += '<td>' + dispatch.destination + '</td>';
-            row += '<td>' + dispatch.transporter + '</td>';
-            row += '<td>' + dispatch.goodsValue + '</td>';
-            row += '<td>' + dispatch.invNo + '</td>';
-            row += '<td>' + dispatch.lrNum + '</td>';
-            row += '<td>' + dispatch.driverName + '</td>';
-            row += '<td>' + dispatch.lorryNo + '</td>';
-            row += '<td>' + (dispatch.lrDate ? dispatch.lrDate : '') + '</td>';
-            row += '<td>' + dispatch.delayDays + '</td>';
-            row += '<td>' + dispatch.noOfCases + '</td>';
-            row += '<td>' + dispatch.formNum + '</td>';
-            row += '<td>' + (dispatch.cFormDate ? dispatch.cFormDate : '') + '</td>';
-            row += '<td>' + dispatch.cFormValue + '</td>';
-            row += '<td>' + (dispatch.podDate ? dispatch.podDate : '') + '</td>';
-            row += '<td>' + dispatch.podNum + '</td>';
-            row += '<td>' + dispatch.podReason + '</td>';
-            row += '</tr>';
-
-            // Append the row to the table body
-            $('#dispatch-table tbody').append(row);
-        });
-    } else {
-        // If no data is available
-        $('#dispatch-table tbody').append('<tr><td colspan="18">No data available</td></tr>');
-    }
-}
-
 // Handle button click event
-/*$('#load-data-btn').click(function() {
+/*$('#download').click(function() {
     makeAjaxRequest("dispatch-register-data", handleDispatchReportData);
 });*/
 
-const rows = [
+/*const rows = [
        {
            transactionNo: "000000000001",
            dispatchDate: "04/04/2023",
@@ -349,4 +333,4 @@ const rows = [
               podNumber: "12934.00",
               reason: ""
           }
-   ];
+   ];*/

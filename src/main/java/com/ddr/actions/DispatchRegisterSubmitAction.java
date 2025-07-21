@@ -36,6 +36,8 @@ public class DispatchRegisterSubmitAction extends ActionSupport {
     public String getDispatchDataFromSession() throws Exception {
         logger.debug("getting dispatch data from session");
 
+        getData();
+
         Map<String, Object> session = ActionContext.getContext().getSession();
 
         // Check if the session contains the "dispatch_data" key
@@ -52,6 +54,18 @@ public class DispatchRegisterSubmitAction extends ActionSupport {
     public String getData() throws Exception {
         logger.debug("getData method called..");
         logger.debug("DTO :: {}", dto);
+
+        if (dto == null) {
+            dto = new DispatchRegisterDTO();
+            dto.setBranch("10");
+            dto.setStockPoint("10");
+            dto.setDivision("327");
+            dto.setStartDate("01/04/2023");
+            dto.setEndDate("31/03/2024");
+            dto.setCustomer("0");
+            dto.setReportType("Y");
+            dto.setFinancialYear("17");
+        }
 
         DispatchRegisterSubmitService service = new DispatchRegisterSubmitService();
         result = service.getDispatchReportData(dto);
