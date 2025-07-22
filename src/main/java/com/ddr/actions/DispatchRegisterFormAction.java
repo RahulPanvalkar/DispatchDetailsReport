@@ -70,6 +70,7 @@ public class DispatchRegisterFormAction extends ActionSupport {
         return SUCCESS;
     }
 
+    // method to submit the form
     public String submit() throws Exception {
         logger.debug("submit method called..");
 
@@ -88,7 +89,7 @@ public class DispatchRegisterFormAction extends ActionSupport {
         }
 
         // stored it in session
-        ActionContext.getContext().getSession().put("dispatch_data", result);
+        ActionContext.getContext().getSession().put("dispatch_dto", this.dto);
 
         return SUCCESS;
     }

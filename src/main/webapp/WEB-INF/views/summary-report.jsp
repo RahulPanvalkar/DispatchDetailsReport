@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ taglib prefix="s" uri="/struts-tags" %>
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -10,7 +12,17 @@
         <link rel='stylesheet' type='text/css' media='screen' href='${pageContext.request.contextPath}/stylesheet/report.css'>
 	</head>
 	<body>
+	    <!-- alert message -->
+        <s:if test="message != null">
+            <script>
+                $(document).ready(function() {
+                    alert('<s:property value="message" />');
+                });
+            </script>
+        </s:if>
 	    <main class="main-div">
+
+
             <div class="header">
                 <h2>HEALTHCARE PVT LTD.</h2>
                 <h3>HEALTHCARE LTD-BHIW</h3>
@@ -26,10 +38,10 @@
             <div style="clear: both;"></div>
 
             <div class="buttons">
-                <button  class="btn" onclick="history.back()">Back</button>
-                <span id="download">
+                <button class="btn" onclick="history.back()">Back</button>
+                <a id="download" href="download-file">
                     <img src="${pageContext.request.contextPath}/images/excel_icon.png" alt="download" />
-                </span>
+                </a>
             </div>
 
             <div class="report-container">

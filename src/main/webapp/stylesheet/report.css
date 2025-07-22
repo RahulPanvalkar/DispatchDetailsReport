@@ -15,6 +15,18 @@ body {
     font-size: 0.8rem;
 }
 
+.loader-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+
 .main-div {
     border: 1px solid var(--c-primary-dark);
     padding: 1rem;
@@ -42,6 +54,7 @@ body {
     color: var(--c-white);
     border-radius: 0.2rem;
     margin-top: 0.5rem;
+    cursor: pointer;
 }
 
 .btn-right {

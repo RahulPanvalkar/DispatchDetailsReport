@@ -18,17 +18,17 @@ import java.util.List;
 
 public class DispatchRegisterExcelService {
 
-    private static final DispatchReportDAO dispatchReportDAO = new DispatchReportDAO();
+    private final DispatchReportDAO dispatchReportDAO = new DispatchReportDAO();
 
     private static final Logger logger = LoggerUtil.getLogger(DispatchRegisterExcelService.class);
 
-    private static int currentRow = 0;
+    private int currentRow = 0;
 
-    private static final String[] headers = {"TRANSACTION NO", "DISPATCH DATE", "PARTY", "DESTINATION", "TRANSPORTER", "GOODS VALUE",
+    private final String[] headers = {"TRANSACTION NO", "DISPATCH DATE", "PARTY", "DESTINATION", "TRANSPORTER", "GOODS VALUE",
             "INVOICE NO", "LR NO", "DRIVER NAME", "LORRY NUMBER", "LR DATE", "DISPATCH DELAY", "NO OF CASES",
             "FORM NUM", "C FORM DATE", "C FORM VALUE", "POD DATE", "POD NUMBER", "REASON"};
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         //DownloadService service = new DownloadService();
         String filePath = "D:\\RAHUL\\TASK\\Dispatch details report summary\\DispatchDetailsReport\\module-resource\\Dispatch-Register-Summary.xlsx";
         DispatchRegisterDTO dto = new DispatchRegisterDTO();
@@ -43,13 +43,14 @@ public class DispatchRegisterExcelService {
 
         DispatchRegisterExcelService service = new DispatchRegisterExcelService();
         service.updateFileData(dto);
-    }
+    }*/
 
-    public void updateFileData(DispatchRegisterDTO registerDTO) {
+    public String updateFileData(DispatchRegisterDTO registerDTO) {
         logger.debug("updating excel file..");
+        String filePath = "";
         if (registerDTO == null) {
             logger.debug("registerDTO is null");
-            return;
+            return filePath;
         }
         try {
             // getting DispatchRegister list
@@ -69,22 +70,22 @@ public class DispatchRegisterExcelService {
             String division = "Division : " + divisionDesc;
 
             // Excel file path
-            String filePath = "D:\\RAHUL\\TASK\\Dispatch details report summary\\DispatchDetailsReport\\module-resource\\Dispatch-Register-Summary.xlsx";
+            filePath = "D:\\RAHUL\\TASK\\Dispatch details report summary\\DispatchDetailsReport\\module-resource\\Dispatch-Register-Summary.xlsx";
 
             // add data in file and return inputStream for downloading
             //InputStream inputStream =
             addDispatchDataInFile(filePath, dispRegList, compName, locationName, finYearRange, division);
 
             // after successful update return file path for downloading
-             // return filePath;
+            return filePath;
         } catch (Exception e) {
             logger.error("Exception occurred in updateFileData :: ", e);
         }
-        //return filePath;
+        return filePath;
     }
 
     // Method to create Excel file for Dispatch Register Report Summary
-    private static void addDispatchDataInFile(String filePath, List<DispatchReport> dispRegList, String compName, String locationName, String finYearRange, String division) {
+    private void addDispatchDataInFile(String filePath, List<DispatchReport> dispRegList, String compName, String locationName, String finYearRange, String division) {
         try {
 
             logger.debug("dispRegList size >> [{}]", dispRegList.size());
@@ -290,7 +291,7 @@ public class DispatchRegisterExcelService {
         //return null;
     }
 
-    private static void addDispatchDataInFileForAllDivision(XSSFWorkbook workbook, XSSFSheet xssfSheet, DispatchRegisterDTO registerDTO, String locationName, String finYearRange, String division) {
+    private void addDispatchDataInFileForAllDivision(XSSFWorkbook workbook, XSSFSheet xssfSheet, DispatchRegisterDTO registerDTO, String locationName, String finYearRange, String division) {
         try {
 
             // getting DispatchRegister list

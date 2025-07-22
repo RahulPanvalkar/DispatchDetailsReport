@@ -79,7 +79,7 @@ public class DispatchReportDAO {
                     dispReg.setNoOfCases(rs.getInt("NO_OF_CASES"));
                     dispReg.setFormNum(rs.getString("FORM_NUM"));
                     dispReg.setcFormValue(rs.getInt("CFORM_VALUE"));
-                    dispReg.setPodNum(rs.getInt("POD_NUM"));
+                    //dispReg.setPodNum(rs.getInt("POD_NUM"));
                     dispReg.setPodReason(rs.getString("POD_REASON"));
 
                     dispReg.setLrDate(CommonUtil.parseDate(rs.getString("LR_DATE")));

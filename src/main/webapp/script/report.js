@@ -3,6 +3,8 @@ $(document).ready(function () {
     // GENERIC FUNCTION TO SEND AJAX REQUEST
     function makeAjaxRequest(URL, callback) {
         console.log("sending ajax request to >> [",URL,"]");
+        // Show loader
+        $("#loader").show();
         $.ajax({
             url: URL,
             type: 'GET',
@@ -19,7 +21,7 @@ $(document).ready(function () {
     }
 
     // get register data
-    //makeAjaxRequest("dispatch-register-data", handleDispatchReportData);
+    makeAjaxRequest("dispatch-register-data", handleDispatchReportData);
 
     // function to handle the ajax response and populate table with data
     function handleDispatchReportData(response) {
@@ -67,6 +69,8 @@ $(document).ready(function () {
 
         $("#fixed-body-table tbody").html(fixedRow);
         $("#scroll-body-table tbody").html(scrollRow);
+        // Hide loader
+        $("#loader").hide();
     }
 
     // To scroll the header names horizontally or values vertically  
@@ -208,7 +212,7 @@ $(document).ready(function () {
         }*/
 
         //populateDispatchReportData();
-
+/*
 const rows = [
    {
        dspTrnNo: "000000000001",
