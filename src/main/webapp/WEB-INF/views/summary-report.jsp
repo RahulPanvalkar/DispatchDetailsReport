@@ -38,39 +38,39 @@
                 <table class="outer-tbl"  cellspacing="0" cellpadding="0">
                     <tr class="outer-tbl-tr">
                         <td class="outer-tbl-td">
-                            <div class="fixed">
-                                <table class="inner-tbl fixed-table">
+                            <div class="fixed-header">
+                                <table id="fixed-header-table" class="inner-tbl fixed-table">
                                     <thead>
                                         <tr class="inner-tbl-tr">
-                                            <th>TRANSACTION NO</th>
-                                            <th>DISPATCH DATE</th>
-                                            <th>PARTY</th>
+                                            <th><div class="header-name"><span>TRANSACTION</span><span>NO</span></div></th>
+                                            <th><div class="header-name"><span>DISPATCH</span><span>DATE</span></div></th>
+                                            <th><div class="header-name"><span>PARTY</span></div></th>
                                         </tr>
                                     </thead>
                                 </table>
                             </div>
                         </td>
                         <td>
-                            <div class="scroll-header fixed"  style="overflow-y: scroll;">
-                                <table class="inner-tbl">
+                            <div class="scroll-header"  style="overflow-y: scroll;">
+                                <table id="scroll-header-table" class="inner-tbl">
                                     <thead>
                                         <tr class="inner-tbl-tr">
-                                            <th>DESTINATION</th>
-                                            <th>TRANSPORTER</th>
-                                            <th>GOODS VALUE</th>
-                                            <th>INVOICE NO</th>
-                                            <th>LR NO</th>
-                                            <th>DRIVER NAME</th>
-                                            <th>LORRY NUMBER</th>
-                                            <th>LR DATE</th>
-                                            <th>DISPATCH DELAY</th>
-                                            <th>NO OF CASES</th>
-                                            <th>FORM NUM</th>
-                                            <th>C FORM DATE</th>
-                                            <th>C FORM VALUE</th>
-                                            <th>POD DATE</th>
-                                            <th>POD NUMBER</th>
-                                            <th>REASON</th>
+                                            <th><div class="header-name"><span>DESTINATION</span></div></th>
+                                            <th><div class="header-name"><span>TRANSPORTER</span></div></th>
+                                            <th><div class="header-name text-right"><span>GOODS</span><span>VALUE</span></div></th>
+                                            <th><div class="header-name"><span>INVOICE</span><span>NO</span></div></th>
+                                            <th><div class="header-name text-right">LR NO</div></th>
+                                            <th><div class="header-name"><span>DRIVER</span><span>NAME</span></div></th>
+                                            <th><div class="header-name"><span>LORRY</span><span>NUMBER</span></div></th>
+                                            <th><div class="header-name"><span>LR</span><span>DATE</span></div></th>
+                                            <th><div class="header-name"><span>DISPATCH</span><span>DELAY</span></div></th>
+                                            <th><div class="header-name text-right"><span>NO</span><span>OF CASES</span></div></th>
+                                            <th><div class="header-name"><span>FORM</span><span>NUM</span></div></th>
+                                            <th><div class="header-name"><span>C FORM</span><span>DATE</span></div></th>
+                                            <th><div class="header-name"><span>C FORM</span><span>VALUE</span></div></th>
+                                            <th><div class="header-name"><span>POD</span><span>DATE</span></div></th>
+                                            <th><div class="header-name text-right"><span>POD</span><span>NUMBER</span></div></th>
+                                            <th><div class="header-name"><span>REASON</span></div></th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -86,8 +86,8 @@
                     <!-- Data Row Tables -->
                     <tr class="outer-tbl-tr">
                         <td class="outer-tbl-td">
-                            <div class="fixed" style="overflow-x: scroll;">
-                                <table id="value-table-1" class="inner-tbl fixed-table">
+                            <div class="fixed-body">
+                                <table id="fixed-body-table" class="inner-tbl fixed-table">
                                     <tbody>
                                         <!-- Dynamically populated using jQuery -->
                                     </tbody>
@@ -96,7 +96,7 @@
                         </td>
                         <td class="outer-tbl-td">
                             <div class="scroll-body">
-                                <table id="value-table-2" class="inner-tbl">
+                                <table id="scroll-body-table" class="inner-tbl">
                                     <tbody>
                                         <!-- Dynamically populated using jQuery -->
                                     </tbody>

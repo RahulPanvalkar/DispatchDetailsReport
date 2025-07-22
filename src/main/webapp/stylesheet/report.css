@@ -1,23 +1,6 @@
 :root {
-    --pestal-medium-blue: rgb(142, 170, 218);
-    --pestal-light-blue: rgb(219, 229, 241);
-    --light-cornflower-blue: rgb(198, 217, 241);
-    --aqua-blue: rgb(145, 206, 218);
-    --sea-blue: rgb(48, 133, 154);
-    --pestal-teal-blue: rgb(49, 123, 141);
-    --pestal-medium-light-blue: rgb(141, 171, 217);
-    --cyan-blue: rgb(48, 133, 154);
-    --white: rgb(255, 255, 255);
-    --antiquewhite: rgb(238, 236, 224);
-    --beige: rgb(238, 236, 224);
-    --lavender-gray: rgb(227, 221, 232);
-    --yellow: rgb(254, 217, 102);
-    --light-yellow: rgb(253, 240, 221);
-    --pastel-green: rgb(197, 224, 180);
-    --baby-pink: rgb(229, 223, 235);
-    --red: rgb(229, 183, 187);
-    --light-gray: rgb(224, 224, 224);
-    --lighter-gray: rgb(242, 242, 242);
+    --c-light-yellow: rgb(253, 240, 221);
+    --c-red: rgb(171, 84, 92);
 }
 
 * {
@@ -71,10 +54,13 @@ body {
 }
 
 .division-label {
-    background-color: var(--light-yellow);
+    color: var(--c-red);
+    font-size: 0.75rem;
+    background-color: var(--c-light-yellow);
     padding-block: 0.2rem;
     padding-left: 0.2rem;
     border-inline: 0.1px solid #aaa;
+    border-bottom: 1px solid #aaa;
 }
 
 table {
@@ -94,6 +80,7 @@ table {
 
 .inner-tbl-tr th,
 .inner-tbl-tr td {
+    min-width: 8rem;
     border: 1px solid #aaa;
     padding: 0.2rem;
     font-size: 0.75rem;
@@ -103,9 +90,22 @@ table {
 
 
 .inner-tbl-tr th {
+    min-width: 8rem;
     background-color: var(--light-gray);
-    padding: 0.8rem 0.5rem;
+    padding: 0.5rem 0.5rem;
     color: var(--c-primary);
+}
+
+.header-name {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-right {
+    text-align: right;
 }
 
 #download {
@@ -114,7 +114,7 @@ table {
     cursor: pointer;
 }
 
-#download img{
+#download img {
     width: 1.35rem;
 }
 
@@ -126,31 +126,35 @@ table {
 }
 
 .fixed-table {
-    border-collapse: collapse;
     width: max-content;
     min-width: 100%;
+    border-collapse: collapse;
     table-layout: fixed;
 }
 
-
-.fixed {
+.fixed-body, .scroll-body {
     max-height: 25vh;
-    overflow-y: auto;
 }
 
-.fixed table tbody::-webkit-scrollbar:vertical,
-.fixed::-webkit-scrollbar:vertical {
-    display: none;
+.fixed-body {
+    overflow-x: scroll;
+    overflow-y: hidden;
 }
 
-.scroll-header, .scroll-body{
-    max-width: calc(100% - 17.5%);
-    max-height: 25vh;
-    overflow: auto;
+.fixed-body::-webkit-scrollbar:vertical {
+    width: 0px;
+    background: transparent;
+}
+
+
+.scroll-header, .scroll-body {
+    max-width: calc(100% - 53.5%);
+    overflow: scroll;
 }
 
 
 /* hide header row scrollbar */
+.fixed::-webkit-scrollbar:vertical,
 .scroll-header::-webkit-scrollbar {
-  display: none;                 /* Chrome, Safari, Opera */
+    display: none;
 }
