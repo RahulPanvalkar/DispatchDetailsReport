@@ -36,6 +36,7 @@
                     <div class="input-box">
                         <select name="dto.branch" id="branch">
                             <option value="">Select</option>
+                            <option value="0">All</option>
                         </select>
                         <h5 id="branchCheck" class="error"></h5>
                     </div>
@@ -45,6 +46,7 @@
                     <div class="input-box">
                         <select name="dto.stockPoint" id="stockPoint">
                             <option value="">Select</option>
+                            <option value="0">All</option>
                         </select>
                         <h5 id="stockPointCheck" class="error"></h5>
                     </div>
@@ -53,6 +55,7 @@
                     <label for="division" class="required">Division</label>
                     <div class="input-box">
                         <select name="dto.division" id="division">
+                            <option value="">Select</option>
                             <option value="0">All</option>
                         </select>
                         <h5 id="divisionCheck" class="error"></h5>
@@ -82,6 +85,7 @@
                     <label for="customer" class="required">Customer</label>
                     <div class="input-box">
                         <select name="dto.customer" id="customer">
+                            <option value="">Select</option>
                             <option value="0">All</option>
                         </select>
                         <h5 id="customerCheck" class="error"></h5>
@@ -103,7 +107,7 @@
 
                     <div class="form-actions">
                         <button type="submit" id="submit-btn" class="btn">Submit</button>
-                        <button type="reset" id="exit-btn" class="btn">Reset</button>
+                        <button type="reset" id="reset-btn" class="btn">Reset</button>
                     </div>
                 </fieldset>
             </s:form>
