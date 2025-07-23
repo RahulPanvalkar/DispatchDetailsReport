@@ -50,6 +50,7 @@ body {
 }
 
 .btn {
+    text-decoration: none;
     padding: 0.35rem 1rem;
     background: var(--c-btn-bg);
     color: var(--c-white);
@@ -94,7 +95,7 @@ table {
 
 .inner-tbl-tr th,
 .inner-tbl-tr td {
-    min-width: 8rem;
+    /*min-width: 8rem;*/
     border: 1px solid #aaa;
     padding: 0.2rem;
     font-size: 0.75rem;
@@ -104,9 +105,9 @@ table {
 
 
 .inner-tbl-tr th {
-    min-width: 8rem;
+    /*min-width: 8rem;*/
     background-color: var(--c-light-gray);
-    padding: 0.5rem 0.5rem;
+    /*padding: 0.5rem 0.5rem;*/
     color: var(--c-primary);
 }
 
@@ -161,14 +162,101 @@ table {
 }
 
 
-.scroll-header, .scroll-body {
+.scroll-header {
+    max-width: calc(100% - 53.5%);
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+
+.scroll-body {
     max-width: calc(100% - 53.5%);
     overflow: scroll;
 }
 
 
-/* hide header row scrollbar */
-.fixed::-webkit-scrollbar:vertical,
-.scroll-header::-webkit-scrollbar {
-    display: none;
+
+.style {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 }
+
+/* SET FIXED MIN WIDTH */
+.tran {
+    min-width: 8rem;
+}
+
+.disp-date {
+    min-width: 7rem;
+}
+
+.party {
+    min-width: 20rem;
+}
+
+.dest {
+    min-width: 12rem;
+}
+
+.transp {
+    min-width: 16rem;
+}
+
+.goods-val {
+    min-width: 7rem;
+}
+
+.inv-no {
+    min-width: 10rem;
+}
+
+.lr-no {
+    min-width: 8rem;
+}
+
+.driv-no {
+    min-width: 10rem;
+}
+
+.lorry-no {
+    min-width: 6rem;
+}
+
+.lr-date {
+    min-width: 7rem;
+}
+
+.disp-delay {
+    min-width: 6rem;
+}
+
+.cases {
+    min-width: 7rem;
+}
+
+.form-no {
+    min-width: 5rem;
+}
+
+.form-date {
+    min-width: 7rem;
+}
+
+.form-val {
+    min-width: 6rem;
+}
+
+.pod-date {
+    min-width: 7rem;
+}
+
+.pod-num {
+    min-width: 5rem;
+}
+
+.reason {
+    min-width: 10rem;
+}
+
+

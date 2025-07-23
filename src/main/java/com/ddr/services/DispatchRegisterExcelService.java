@@ -131,7 +131,8 @@ public class DispatchRegisterExcelService {
             createHeaderRow(workbook, xssfSheet, headers, ++currentRow); // rowNo = 3
 
             // Create custom styled row to show Division
-            createStyledRow(workbook, xssfSheet, ++currentRow, division, 0, headerLength - 1,
+            String divisionDesc = "Division : " + division;
+            createStyledRow(workbook, xssfSheet, ++currentRow, divisionDesc, 0, headerLength - 1,
                     (short) 9, "Arial", IndexedColors.BLACK.getIndex(), IndexedColors.LIGHT_CORNFLOWER_BLUE.index,
                     true, false, CellStyle.ALIGN_LEFT);
 

@@ -6,6 +6,8 @@ import java.time.LocalDate;
 public class DispatchReport {
     private String dspTrnNo;    // TRANSACTION NO >> 000000000000001
     private LocalDate dspDt;    // DISPATCH DATE >> 04/04/2023
+    private BigDecimal dspValue;
+    private String podReason;   // REASON
     private String custName;    // PARTY >> RUBY PHARMA
     private String destination; // DESTINATION >> SOLAPUR
     private String transporter; // TRANSPORTER >> BTI
@@ -22,7 +24,6 @@ public class DispatchReport {
     private int cFormValue;     // C FORM VALUE >> 0.00
     private LocalDate podDate;  // POD DATE
     private int podNum;     // POD NUMBER
-    private String podReason;   // REASON
 
 
     // CURRENTLY NOT REQUIRED
@@ -32,7 +33,6 @@ public class DispatchReport {
 //    private String division;
 //    private String challanNo;
 //    private int custId;
-//    private float dspValue;
 //    private int prodId;
 //    private String prodCd;
 //    private String prodName;
@@ -63,6 +63,14 @@ public class DispatchReport {
 
     public void setDspDt(LocalDate dspDt) {
         this.dspDt = dspDt;
+    }
+
+    public BigDecimal getDspValue() {
+        return dspValue;
+    }
+
+    public void setDspValue(BigDecimal dspValue) {
+        this.dspValue = dspValue;
     }
 
     public String getCustName() {

@@ -570,7 +570,7 @@ $(document).ready(function() {
         }  else if (!regex.test(startDate)) {
             $("#startDtCheck").show();
             $("#startDtCheck").html("Invalid start date format");
-            $("#startDate").datepicker("setDate", null);
+//            $("#startDate").datepicker("setDate", null);
             return false;
         }
 
@@ -626,7 +626,7 @@ $(document).ready(function() {
         }  else if (!regex.test(endDate)) {
              $("#endDtCheck").show();
              $("#endDtCheck").html("Invalid End date format");
-             $("#endDate").html("");
+             //$("#startDate").datepicker("setDate", null);
              return false;
         }
 

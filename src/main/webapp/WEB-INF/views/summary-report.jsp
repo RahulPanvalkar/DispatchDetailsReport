@@ -12,6 +12,8 @@
         <link rel='stylesheet' type='text/css' media='screen' href='${pageContext.request.contextPath}/stylesheet/report.css'>
 	</head>
 	<body>
+        <%@include file="./loader.jsp" %>
+
 	    <!-- alert message -->
         <s:if test="message != null">
             <script>
@@ -20,8 +22,8 @@
                 });
             </script>
         </s:if>
-	    <main class="main-div">
 
+	    <main class="main-div">
 
             <div class="header">
                 <h2 id="compName">HEALTHCARE PVT LTD.</h2>
@@ -38,7 +40,7 @@
             <div style="clear: both;"></div>
 
             <div class="buttons">
-                <button class="btn" onclick="history.back()">Back</button>
+                <button class="btn" onclick="window.location.href='dispatch-register'">Back</button>
                 <a id="download" href="download-file">
                     <img src="${pageContext.request.contextPath}/images/excel_icon.png" alt="download" />
                 </a>
@@ -54,35 +56,35 @@
                                 <table id="fixed-header-table" class="inner-tbl fixed-table">
                                     <thead>
                                         <tr class="inner-tbl-tr">
-                                            <th><div class="header-name"><span>TRANSACTION</span><span>NO</span></div></th>
-                                            <th><div class="header-name"><span>DISPATCH</span><span>DATE</span></div></th>
-                                            <th><div class="header-name"><span>PARTY</span></div></th>
+                                            <th class="tran"><div class="header-name"><span>TRANSACTION</span><span>NO</span></div></th>
+                                            <th class="disp-date"><div class="header-name"><span>DISPATCH</span><span>DATE</span></div></th>
+                                            <th class="party"><div class="header-name"><span>PARTY</span></div></th>
                                         </tr>
                                     </thead>
                                 </table>
                             </div>
                         </td>
                         <td>
-                            <div class="scroll-header"  style="overflow-y: scroll;">
+                            <div class="scroll-header">
                                 <table id="scroll-header-table" class="inner-tbl">
                                     <thead>
                                         <tr class="inner-tbl-tr">
-                                            <th><div class="header-name"><span>DESTINATION</span></div></th>
-                                            <th><div class="header-name"><span>TRANSPORTER</span></div></th>
-                                            <th><div class="header-name text-right"><span>GOODS</span><span>VALUE</span></div></th>
-                                            <th><div class="header-name"><span>INVOICE</span><span>NO</span></div></th>
-                                            <th><div class="header-name text-right">LR NO</div></th>
-                                            <th><div class="header-name"><span>DRIVER</span><span>NAME</span></div></th>
-                                            <th><div class="header-name"><span>LORRY</span><span>NUMBER</span></div></th>
-                                            <th><div class="header-name"><span>LR</span><span>DATE</span></div></th>
-                                            <th><div class="header-name"><span>DISPATCH</span><span>DELAY</span></div></th>
-                                            <th><div class="header-name text-right"><span>NO</span><span>OF CASES</span></div></th>
-                                            <th><div class="header-name"><span>FORM</span><span>NUM</span></div></th>
-                                            <th><div class="header-name"><span>C FORM</span><span>DATE</span></div></th>
-                                            <th><div class="header-name"><span>C FORM</span><span>VALUE</span></div></th>
-                                            <th><div class="header-name"><span>POD</span><span>DATE</span></div></th>
-                                            <th><div class="header-name text-right"><span>POD</span><span>NUMBER</span></div></th>
-                                            <th><div class="header-name"><span>REASON</span></div></th>
+                                            <th class="dest"><div class="header-name"><span>DESTINATION</span></div></th>
+                                            <th class="transp"><div class="header-name"><span>TRANSPORTER</span></div></th>
+                                            <th class="goods-val"><div class="header-name text-right"><span>GOODS</span><span>VALUE</span></div></th>
+                                            <th class="inv-no"><div class="header-name"><span>INVOICE</span><span>NO</span></div></th>
+                                            <th class="lr-no"><div class="header-name text-right">LR NO</div></th>
+                                            <th class="driv-no"><div class="header-name"><span>DRIVER</span><span>NAME</span></div></th>
+                                            <th class="lorry-no"><div class="header-name"><span>LORRY</span><span>NUMBER</span></div></th>
+                                            <th class="lr-date"><div class="header-name"><span>LR</span><span>DATE</span></div></th>
+                                            <th class="disp-delay"><div class="header-name"><span>DISPATCH</span><span>DELAY</span></div></th>
+                                            <th class="cases"><div class="header-name text-right"><span>NO</span><span>OF CASES</span></div></th>
+                                            <th class="form-no"><div class="header-name"><span>FORM</span><span>NUM</span></div></th>
+                                            <th class="form-date"><div class="header-name"><span>C FORM</span><span>DATE</span></div></th>
+                                            <th class="form-val"><div class="header-name"><span>C FORM</span><span>VALUE</span></div></th>
+                                            <th class="pod-date"><div class="header-name"><span>POD</span><span>DATE</span></div></th>
+                                            <th class="pod-num"><div class="header-name text-right"><span>POD</span><span>NUMBER</span></div></th>
+                                            <th class="reason"><div class="header-name"><span>REASON</span></div></th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -91,7 +93,7 @@
                     </tr>
 
                     <tr class="outer-tbl-tr">
-                        <td class="outer-tbl-td fixed-table"> <div class="division-label">Division : MAIN</div></td>
+                        <td class="outer-tbl-td fixed-table"> <div id="divLabel" class="division-label">Division : MAIN</div></td>
                         <td class="outer-tbl-td"> <div class="division-label  scroll-header"><span>&nbsp;</span></div></td>
                     </tr>
 

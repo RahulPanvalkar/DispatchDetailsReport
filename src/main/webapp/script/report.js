@@ -1,9 +1,11 @@
 $(document).ready(function () {
+    //$("#loader").show();
 
     // GENERIC FUNCTION TO SEND AJAX REQUEST
     function makeAjaxRequest(URL, callback) {
         console.log("sending ajax request to >> [",URL,"]");
         // Show loader
+        $(".main-div").hide();
         $("#loader").show();
         $.ajax({
             url: URL,
@@ -36,6 +38,7 @@ $(document).ready(function () {
         var dateTimes = response.date_time.split('T');
         $('.date-time').html(`Report Date: ${dateTimes[0]} Time: ${dateTimes[1]}`);
 
+        $('#divLabel').html(`Division : ${response.div_desc}`);
 
         // Ensure data is present
         if (!response.data || response.data.length === 0) {
@@ -49,30 +52,30 @@ $(document).ready(function () {
         response.data.forEach(dispData => {
             fixedRow += `
                 <tr class='inner-tbl-tr'>
-                    <td>${dispData.dspTrnNo}</td>
-                    <td>${dispData.dspDtStr || ''}</td>
-                    <td>${dispData.custName}</td>
+                    <td class="tran">${dispData.dspTrnNo}</td>
+                    <td class="disp-date">${dispData.dspDtStr || ''}</td>
+                    <td class="party">${dispData.custName}</td>
                 </tr>
             `;
 
             scrollRow += `
                 <tr class='inner-tbl-tr'>
-                    <td>${dispData.destination}</td>
-                    <td>${dispData.transporter}</td>
-                    <td>${dispData.goodsValue}</td>
-                    <td>${dispData.invNo}</td>
-                    <td>${dispData.lrNum}</td>
-                    <td>${dispData.driverName}</td>
-                    <td>${dispData.lorryNo}</td>
-                    <td>${dispData.lrDateStr || ''}</td>
-                    <td>${dispData.delayDays}</td>
-                    <td>${dispData.noOfCases}</td>
-                    <td>${dispData.formNum}</td>
-                    <td>${dispData.cFormDate || ''}</td>
-                    <td>${dispData.cFormValue}</td>
-                    <td>${dispData.podDateStr || ''}</td>
-                    <td>${dispData.podNum}</td>
-                    <td>${dispData.podReason}</td>
+                    <td class="dest">${dispData.destination}</td>
+                    <td class="transp">${dispData.transporter}</td>
+                    <td class="goods-val text-right">${dispData.goodsValue}</td>
+                    <td class="inv-no">${dispData.invNo}</td>
+                    <td class="lr-no">${dispData.lrNum}</td>
+                    <td class="driv-no">${dispData.driverName}</td>
+                    <td class="lorry-no">${dispData.lorryNo}</td>
+                    <td class="lr-date">${dispData.lrDateStr || ''}</td>
+                    <td class="disp-delay text-right">${dispData.delayDays}</td>
+                    <td class="cases text-right">${dispData.noOfCases}</td>
+                    <td class="form-no">${dispData.formNum}</td>
+                    <td class="form-date">${dispData.cFormDate || ''}</td>
+                    <td class="form-val text-right">${dispData.cFormValue}</td>
+                    <td class="pod-date">${dispData.podDateStr || ''}</td>
+                    <td class="pod-num text-right">${dispData.podNum}</td>
+                    <td class="reason">${dispData.podReason}</td>
                 </tr>
             `;
         });
@@ -80,6 +83,7 @@ $(document).ready(function () {
         $("#fixed-body-table tbody").html(fixedRow);
         $("#scroll-body-table tbody").html(scrollRow);
         // Hide loader
+        $(".main-div").show();
         $("#loader").hide();
     }
 
@@ -94,64 +98,7 @@ $(document).ready(function () {
         $('.scroll-body').scrollTop($(this).scrollTop());
     });*/
 
-    // Function to Sync header and body cell width
-    function syncTableColumnWidths(headerSelector, bodySelector) {
-        console.log(`Syncing widths for ${headerSelector} and ${bodySelector}...`);
 
-        let $headerCols = $(`${headerSelector} th`);
-        let $rows = $(`${bodySelector} tr`);
-
-        $headerCols.each(function(index) {
-            let headerCol = $(this);
-            let maxWidth = 0;
-
-            // Measure header cell
-            const $tempHeader = $('<span>').text(headerCol.text()).css({
-                visibility: 'hidden',
-                whiteSpace: 'nowrap',
-                position: 'absolute'
-            }).appendTo('body');
-
-            maxWidth = Math.max(maxWidth, $tempHeader.outerWidth());
-
-            $tempHeader.remove();
-
-            // Measure each cell in this column
-            $rows.each(function() {
-                let bodyCol = $(this).find('td').eq(index);
-                if (bodyCol.length) {
-                    const $tempBody = $('<span>').text(bodyCol.text()).css({
-                        visibility: 'hidden',
-                        whiteSpace: 'nowrap',
-                        position: 'absolute'
-                    }).appendTo('body');
-
-                    maxWidth = Math.max(maxWidth, $tempBody.outerWidth());
-
-                    $tempBody.remove();
-                }
-            });
-
-            maxWidth += 16; // Add padding
-
-            // List of columns to right-align
-            const rightAlignHeaders = [
-                "GOODSVALUE", "LRNO", "LORRYNUMBER", "PODNUMBER", "DISPATCHDELAY", "NOOFCASES"
-            ];
-
-            // Apply width to header and all body cells in this column
-            //console.log(headerCol.text());
-
-            headerCol.css('min-width', maxWidth + 'px');
-            $rows.each(function () {
-                const bodyCol = $(this).find('td').eq(index);
-                bodyCol.css('min-width', maxWidth + 'px');
-                if (rightAlignHeaders.includes(headerCol.text())) {
-                    bodyCol.addClass("text-right");
-                }
-            });
-        });
-    }
 
     // to sync the header and data cell width in table
     $(document).ready(function () {
