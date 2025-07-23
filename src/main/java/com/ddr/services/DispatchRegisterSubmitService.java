@@ -13,7 +13,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class DispatchRegisterSubmitService {
 
@@ -55,15 +54,25 @@ public class DispatchRegisterSubmitService {
 
             // get Location Name
             String branch = registerDTO.getBranch();
-            if (branch == null || branch.trim().isEmpty()) branch = null;
-            String locationName = dispatchReportDAO.getLocationNameByLocId(Integer.parseInt(branch));
+            String locationName = "";
+            if ("0".equals(branch)) {
+                locationName = "HEALTHCARE LTD-ALL";
+            } else {
+                locationName = dispatchReportDAO.getLocationNameByLocId(Integer.parseInt(branch));
+            }
 
             // Company name
             String compName = "HEALTHCARE PVT LTD.";    // for company_id=SNK
+            
+            String reportType = ("Y".equalsIgnoreCase(registerDTO.getReportType())) ? "Detailed" : "Summary";
+            
+            String finYearRange = dispatchReportDAO.getFinancialYearByFinYearId(Integer.parseInt(registerDTO.getFinancialYear()));
 
-            String finYearRange = registerDTO.getStartDate() + " TO " + registerDTO.getEndDate();
+            String reportDate = registerDTO.getStartDate() + " To " + registerDTO.getEndDate();
 
             String divisionDesc = dispatchReportDAO.getDivisionNameByDivId(registerDTO.getDivision());
+
+            String currentDateTime = CommonUtil.getCurrentDateTime();
 
             int size = reportDTOList.size();
 
@@ -76,8 +85,11 @@ public class DispatchRegisterSubmitService {
             result.put("total_records", size);
             result.put("loc_name", locationName);
             result.put("comp_name", compName);
+            result.put("report_type", reportType);
             result.put("div_desc", divisionDesc);
             result.put("fin_year_range", finYearRange);
+            result.put("report_date", reportDate);
+            result.put("date_time", currentDateTime);
             return result;
 
         } catch (Exception e) {

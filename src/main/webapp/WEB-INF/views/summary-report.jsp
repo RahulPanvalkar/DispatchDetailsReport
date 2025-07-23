@@ -24,12 +24,12 @@
 
 
             <div class="header">
-                <h2>HEALTHCARE PVT LTD.</h2>
-                <h3>HEALTHCARE LTD-BHIW</h3>
+                <h2 id="compName">HEALTHCARE PVT LTD.</h2>
+                <h3 id="location">HEALTHCARE LTD-BHIW</h3>
             </div>
 
             <div class="sub-header">
-                <p><strong>Dispatch Register Summary Report From:</strong> 01/04/2023 To 31/03/2024</p>
+                <p id="reportHeader"><strong>Dispatch Register Summary Report From:</strong> 01/04/2023 To 31/03/2024</p>
             </div>
 
             <div class="date-time">Report Date: 01/10/2024 Time: 6:07:48 PM</div>

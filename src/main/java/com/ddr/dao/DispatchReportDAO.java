@@ -10,7 +10,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DispatchReportDAO {
 
@@ -160,5 +162,33 @@ public class DispatchReportDAO {
             throw new RuntimeException(e);
         }
         return "";
+    }
+
+    public String getFinancialYearByFinYearId(int finYearId) {
+        String finYear = "";
+        String sql = "SELECT FIN_YEAR_ID, START_DT, END_DT FROM FINANCIAL_YEAR WHERE FIN_YEAR_ID = ?";
+
+        try (Connection conn = DBConnectionManager.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, finYearId);
+
+            logger.debug("Query : [{}], Param : [{}]", sql, finYearId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String startDt = CommonUtil.convertToString(rs.getDate("START_DT"));
+                    String endDt = CommonUtil.convertToString(rs.getDate("END_DT"));
+
+                    finYear = startDt + " To " + endDt;
+
+                }
+                logger.debug("Financial Year dates :: finYear >> {}", finYear);
+            }
+
+        } catch (Exception e) {
+            logger.error("Exception occurred while getting Financial Year >> ", e);
+            throw new RuntimeException(e);
+        }
+        return finYear;
     }
 }

@@ -3,6 +3,7 @@ package com.ddr.services;
 import com.ddr.dao.DispatchReportDAO;
 import com.ddr.model.DispatchRegisterDTO;
 import com.ddr.model.DispatchReport;
+import com.ddr.util.CommonUtil;
 import com.ddr.util.LoggerUtil;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.*;
@@ -58,23 +59,34 @@ public class DispatchRegisterExcelService {
 
             // get Location Name
             String branch = registerDTO.getBranch();
-            if (branch == null || branch.trim().isEmpty()) branch = null;
-            String locationName = dispatchReportDAO.getLocationNameByLocId(Integer.parseInt(branch));
+            String locationName = "";
+            if ("0".equals(branch)) {
+                locationName = "HEALTHCARE LTD-ALL";
+            } else {
+                locationName = dispatchReportDAO.getLocationNameByLocId(Integer.parseInt(branch));
+            }
 
             // Company name
             String compName = "HEALTHCARE PVT LTD.";    // for company_id=SNK
 
-            String finYearRange = registerDTO.getStartDate() + " TO " + registerDTO.getEndDate();
+            String reportType = ("Y".equalsIgnoreCase(registerDTO.getReportType())) ? "Detailed" : "Summary";
+
+            String finYearRange = dispatchReportDAO.getFinancialYearByFinYearId(Integer.parseInt(registerDTO.getFinancialYear()));
+
+            String reportDate = registerDTO.getStartDate() + " To " + registerDTO.getEndDate();
 
             String divisionDesc = dispatchReportDAO.getDivisionNameByDivId(registerDTO.getDivision());
-            String division = "Division : " + divisionDesc;
+
+            String currentDateTime = CommonUtil.getCurrentDateTime();
+
+            int size = dispRegList.size();
 
             // Excel file path
-            filePath = "D:\\RAHUL\\TASK\\Dispatch details report summary\\DispatchDetailsReport\\module-resource\\Dispatch-Register-Summary.xlsx";
+            filePath = "D:\\RAHUL\\TASK\\Dispatch details report summary\\DispatchDetailsReport\\module-resource\\Dispatch-Register-Report.xlsx";
 
             // add data in file and return inputStream for downloading
             //InputStream inputStream =
-            addDispatchDataInFile(filePath, dispRegList, compName, locationName, finYearRange, division);
+            addDispatchDataInFile(filePath, dispRegList, compName, locationName, finYearRange, divisionDesc, reportType);
 
             // after successful update return file path for downloading
             return filePath;
@@ -85,7 +97,7 @@ public class DispatchRegisterExcelService {
     }
 
     // Method to create Excel file for Dispatch Register Report Summary
-    private void addDispatchDataInFile(String filePath, List<DispatchReport> dispRegList, String compName, String locationName, String finYearRange, String division) {
+    private void addDispatchDataInFile(String filePath, List<DispatchReport> dispRegList, String compName, String locationName, String finYearRange, String division, String reportType) {
         try {
 
             logger.debug("dispRegList size >> [{}]", dispRegList.size());
@@ -94,7 +106,8 @@ public class DispatchRegisterExcelService {
             logger.debug("creating workbook..");
             XSSFWorkbook workbook = new XSSFWorkbook();
             logger.debug("creating sheet..");
-            XSSFSheet xssfSheet = workbook.createSheet("Dispatch Register Summary");
+            String sheetName = "Dispatch Register " + reportType + " Report";
+            XSSFSheet xssfSheet = workbook.createSheet(sheetName);
 
             // Create header in row 1
             String[] headers = {"TRANSACTION NO", "DISPATCH DATE", "PARTY", "DESTINATION", "TRANSPORTER", "GOODS VALUE",
@@ -109,7 +122,7 @@ public class DispatchRegisterExcelService {
                 locationName = "";
             }
 
-            String title = "Dispatch Register Summary Report From : " + finYearRange;
+            String title = "Dispatch Register " + reportType +" Report From : " + finYearRange;
             createTitleRow(workbook, xssfSheet, compName.toUpperCase(), headerLength, currentRow);  // rowNo = 0
             createTitleRow(workbook, xssfSheet, locationName.toUpperCase(), headerLength, ++currentRow); // rowNo = 1
             createTitleRow(workbook, xssfSheet, title, headerLength, ++currentRow); // rowNo = 2

@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 //
@@ -14,9 +15,9 @@ import java.time.format.DateTimeParseException;
 
 public class CommonUtil {
 
-	private static final Logger logger = LoggerUtil.getLogger(CommonUtil.class);
+    private static final Logger logger = LoggerUtil.getLogger(CommonUtil.class);
 
-	// Method to convert java object to JSON String
+    // Method to convert java object to JSON String
 	/*public static String convertToJson(Map<String, Object> resp) {
 		JsonObject jsonObject = new Gson().toJsonTree(resp).getAsJsonObject();
 
@@ -26,46 +27,53 @@ public class CommonUtil {
 		return result.toString();
 	}*/
 
-	// Method to convert date in String to java.sql.Date format
-	public static Date convertStringToSqlDate(String dateString) throws ParseException {
-		String format = "dd/MM/yyyy";
-		SimpleDateFormat sdf = new SimpleDateFormat(format);
-		java.util.Date date = sdf.parse(dateString);
-		return new Date(date.getTime());
-	}
-	
-	// Method to parse date
-	public static LocalDate parseDate(String dateStr) {
-		if (dateStr == null || dateStr.trim().isEmpty()) {
-			return null;
-		}
+    // Method to convert date in String to java.sql.Date format
+    public static Date convertStringToSqlDate(String dateString) throws ParseException {
+        String format = "dd/MM/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        java.util.Date date = sdf.parse(dateString);
+        return new Date(date.getTime());
+    }
+
+    // Method to parse date
+    public static LocalDate parseDate(String dateStr) {
+        if (dateStr == null || dateStr.trim().isEmpty()) {
+            return null;
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         try {
             LocalDate date = LocalDate.parse(dateStr, formatter);
-			return date;
+            return date;
         } catch (DateTimeParseException e) {
             logger.error("Invalid Date Format: " + dateStr);
-			e.printStackTrace();
+            e.printStackTrace();
         }
-		return null;
-	}
+        return null;
+    }
 
-	// Method to convert LocalDate to String
-	public static String convertToString(LocalDate date) {
-		if (date == null) {
-			return "";
-		}
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		return date.format(formatter);
-	}
+    // Method to convert LocalDate to String
+    public static String convertToString(LocalDate date) {
+        if (date == null) {
+            return "";
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return date.format(formatter);
+    }
 
-	// Method to convert LocalDate to String
-	public static String convertToString(java.sql.Date sqlDate) {
-		if (sqlDate == null) {
-			return "";
-		}
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		return sdf.format(sqlDate);
-	}
+    // Method to convert LocalDate to String
+    public static String convertToString(java.sql.Date sqlDate) {
+        if (sqlDate == null) {
+            return "";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(sqlDate);
+    }
+
+    // Method to return current date and time
+    public static String getCurrentDateTime() {
+        LocalDateTime dateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy'T'hh:mm:ss a");
+        return formatter.format(dateTime).toUpperCase();
+    }
 
 }

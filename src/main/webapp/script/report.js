@@ -27,6 +27,16 @@ $(document).ready(function () {
     function handleDispatchReportData(response) {
         console.log("handleDispatchReportData >> response >> ", response);
 
+        console.log(response.fin_year_range, response.comp_name, response.div_desc, response.loc_name, response.report_type, response.date_time);
+        $('#compName').html(response.comp_name);
+        $('#location').html(response.loc_name);
+        $('#reportHeader').html(`<strong>Dispatch Register ${response.report_type} Report From:</strong> ${response.report_date}`);
+        $('.financial-year').html(`Financial Year From ${response.fin_year_range}`);
+
+        var dateTimes = response.date_time.split('T');
+        $('.date-time').html(`Report Date: ${dateTimes[0]} Time: ${dateTimes[1]}`);
+
+
         // Ensure data is present
         if (!response.data || response.data.length === 0) {
             $("#fixed-body-table tbody").html("<tr><td colspan='3'>No data available</td></tr>");
@@ -130,7 +140,7 @@ $(document).ready(function () {
             ];
 
             // Apply width to header and all body cells in this column
-            console.log(headerCol.text());
+            //console.log(headerCol.text());
 
             headerCol.css('min-width', maxWidth + 'px');
             $rows.each(function () {
