@@ -10,9 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DispatchReportDAO {
 
@@ -41,9 +39,22 @@ public class DispatchReportDAO {
             stmt.setString(10, "N"); // DETAILED
             stmt.setString(11, "10"); // STOCKPOINTID*/
 
-            String finYearFlag = dto.getStartDate();
+            String finYearFlag = "CURRENT";
+            String sql = "SELECT FIN_YEAR_CLOSED FROM FINANCIAL_YEAR WHERE FIN_YEAR_ID = ?";
+            try(PreparedStatement ps = conn.prepareStatement(sql)){
+                ps.setString(1, dto.getFinancialYear());
+                logger.debug("Query : [{}], Param : [{}]", sql, dto.getFinancialYear());
 
-            stmt.setString(2, "CURRENT"); // FIN_YR_FLAG -- CURRENT/PREVIOUS
+                try(ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        String flag = rs.getString("FIN_YEAR_CLOSED");
+                        finYearFlag = ("N".equals(flag)) ? "CURRENT" : "PREVIOUS";
+                    }
+                }
+            }
+
+
+            stmt.setString(2, finYearFlag); // FIN_YR_FLAG -- CURRENT/PREVIOUS
             stmt.setInt(3, Integer.parseInt(dto.getFinancialYear()));   // FINYR_ID
             stmt.setString(4, "SNK"); // COMP_CD
             stmt.setString(5, dto.getBranch());  // LOCID
@@ -58,7 +69,7 @@ public class DispatchReportDAO {
             stmt.execute();
 
             logger.debug("Query : [{}], Param : [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]", query,
-                    OracleTypes.CURSOR, "CURRENT", dto.getFinancialYear(), "SNK", dto.getBranch(), dto.getStartDate(),
+                    OracleTypes.CURSOR, finYearFlag, dto.getFinancialYear(), "SNK", dto.getBranch(), dto.getStartDate(),
                     dto.getEndDate(), dto.getDivision(), dto.getCustomer(), dto.getReportType(), dto.getStockPoint());
 
             // Get the cursor (result set)
@@ -83,6 +94,7 @@ public class DispatchReportDAO {
                     dispReg.setcFormValue(rs.getInt("CFORM_VALUE"));
                     //dispReg.setPodNum(rs.getInt("POD_NUM"));
                     dispReg.setPodReason(rs.getString("POD_REASON"));
+                    dispReg.setDivision(rs.getString("DIVISION"));
 
                     dispReg.setLrDate(CommonUtil.parseDate(rs.getString("LR_DATE")));
                     dispReg.setcFormDate(CommonUtil.parseDate(rs.getString("CFORM_DATE")));

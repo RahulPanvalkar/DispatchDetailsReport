@@ -24,13 +24,12 @@ public class DispatchReport {
     private int cFormValue;     // C FORM VALUE >> 0.00
     private LocalDate podDate;  // POD DATE
     private int podNum;     // POD NUMBER
-
+    private String division;
 
     // CURRENTLY NOT REQUIRED
 //    private long rowNum;
 //    private long dspId;
 //    private long divId;
-//    private String division;
 //    private String challanNo;
 //    private int custId;
 //    private int prodId;
@@ -209,13 +208,21 @@ public class DispatchReport {
         this.podReason = podReason;
     }
 
+    public String getDivision() {
+        return division;
+    }
+
+    public void setDivision(String division) {
+        this.division = division;
+    }
+
     @Override
     public String toString() {
         return String.format(
-                "%nDispatchRegister{dspTrnNo='%s', dspDt=%s, custName='%s', destination='%s', transporter='%s', %n" +
+                "%nDispatchRegister{dspTrnNo='%s', dspDt=%s, custName='%s', destination='%s', transporter='%s', Division='%s' %n" +
                         "goodsValue=%.2f, invNo='%s', lrNum='%s', driverName='%s', lorryNo='%s', lrDate=%s, delayDays=%d, %n" +
                         "noOfCases=%d, formNum='%s', cFormDate=%s, cFormValue=%d, podDate=%s, podNum=%d, podReason='%s'}",
-                dspTrnNo, dspDt, custName, destination, transporter, goodsValue, invNo, lrNum, driverName, lorryNo, lrDate,
+                dspTrnNo, dspDt, custName, destination, division, transporter, goodsValue, invNo, lrNum, driverName, lorryNo, lrDate,
                 delayDays, noOfCases, formNum, cFormDate, cFormValue, podDate, podNum, podReason
         );
     }

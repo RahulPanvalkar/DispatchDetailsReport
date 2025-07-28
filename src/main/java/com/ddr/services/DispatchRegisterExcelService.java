@@ -69,7 +69,7 @@ public class DispatchRegisterExcelService {
             // Company name
             String compName = "HEALTHCARE PVT LTD.";    // for company_id=SNK
 
-            String reportType = ("Y".equalsIgnoreCase(registerDTO.getReportType())) ? "Detailed" : "Summary";
+            String reportType = ("Y".equalsIgnoreCase(registerDTO.getReportType())) ? "Detail" : "Summary";
 
             String finYearRange = dispatchReportDAO.getFinancialYearByFinYearId(Integer.parseInt(registerDTO.getFinancialYear()));
 

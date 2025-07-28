@@ -40,6 +40,7 @@ public class SummaryReportAction extends ActionSupport {
         }
 
         dto = (DispatchRegisterDTO) session.get("dispatch_dto");
+        logger.info("dispatch dto from session >> {}", dto);
 
         DispatchRegisterSubmitService service = new DispatchRegisterSubmitService();
         result = service.getDispatchReportData(dto);

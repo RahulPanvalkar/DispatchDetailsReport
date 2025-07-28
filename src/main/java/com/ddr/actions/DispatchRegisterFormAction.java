@@ -74,9 +74,10 @@ public class DispatchRegisterFormAction extends ActionSupport {
     public String submit() throws Exception {
         logger.debug("submit method called..");
 
+        String division = this.dto.getDivision();
         // get dispatch data using stored procedure from service
         DispatchRegisterSubmitService service = new DispatchRegisterSubmitService();
-        result = service.getDispatchReportData(this.dto);
+        result = service.getDispatchRegisterSubmit(this.dto);
 
         if (result == null || result.get("success") == null) {
             error = true;
@@ -89,6 +90,7 @@ public class DispatchRegisterFormAction extends ActionSupport {
         }
 
         // stored it in session
+        this.dto.setDivision(division);
         ActionContext.getContext().getSession().put("dispatch_dto", this.dto);
 
         return SUCCESS;

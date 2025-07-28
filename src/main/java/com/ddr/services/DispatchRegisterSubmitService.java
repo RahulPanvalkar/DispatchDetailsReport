@@ -22,8 +22,7 @@ public class DispatchRegisterSubmitService {
 
     private final DispatchRegisterFormDAO registerFormDAO = new DispatchRegisterFormDAO();
 
-    public Map<String, Object> getDispatchReportData(DispatchRegisterDTO registerDTO) {
-        logger.debug("getting Dispatch Report data..");
+    public Map<String, Object> getDispatchRegisterSubmit(DispatchRegisterDTO registerDTO) {
         Map<String, Object> result = new HashMap<>();
 
         try {
@@ -40,17 +39,96 @@ public class DispatchRegisterSubmitService {
             List<DispatchReport> reports = dispatchReportDAO.callDispatchRegisterProcedure(registerDTO);
 
             if (reports.isEmpty()) {
+                logger.debug("Report data not found..");
+                result.put("success", false);
+                result.put("message", "report data not found");
+                return result;
+            }
+
+            result.put("success", true);
+            result.put("message", "Dispatch data found");
+
+            return result;
+
+        } catch (Exception e) {
+            logger.error("Exception occurred in getDispatchReportData :: ", e);
+            result.put("success", false);
+            result.put("message", "Error: " + e.getMessage());
+        }
+        return result;
+    }
+
+    public Map<String, Object> getDispatchReportData(DispatchRegisterDTO registerDTO) {
+        logger.debug("getting Dispatch Report data..");
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            // check if user input is valid
+            String[] valResult = isAllDataValid(registerDTO);
+
+            if ("false".equals(valResult[0])) {
+                result.put("success", false);
+                result.put("message", valResult[1]);
+                return result;
+            }
+
+            logger.info("Division :: [{}]", registerDTO.getDivision());
+
+            // getting DispatchRegister list
+            List<DispatchReport> reports = dispatchReportDAO.callDispatchRegisterProcedure(registerDTO);
+            int size = reports.size();
+
+            if (reports.isEmpty()) {
                 logger.debug("Report data not found");
                 result.put("success", false);
                 result.put("message", "report data not found");
                 return result;
             }
 
-            List<DispatchReportDTO> reportDTOList = reports.stream()
-                    .map(DispatchReportDTO::new)
-                    .toList();
+            List<DispatchReportDTO> reportDtoMainList = null;
+            List<DispatchReportDTO> reportDtoZenList = null;
+            if ("0".equals(registerDTO.getDivision())) {
 
-            logger.debug("dispReg(0) :: {}", reports.get(0));
+                List<DispatchReportDTO> mainDtoReports = reports.stream()
+                        .filter(dr -> "MAIN".equals(dr.getDivision()))
+                        .map(DispatchReportDTO::new)
+                        .toList();
+                logger.debug("MAIN division list size >> [{}]", mainDtoReports.size());
+
+                List<DispatchReportDTO> zenDtoReports = reports.stream()
+                        .filter(dr -> "ZENKARE".equals(dr.getDivision()))
+                        .map(DispatchReportDTO::new)
+                        .toList();
+                logger.debug("ZENKARE division list size >> [{}]", zenDtoReports.size());
+
+                if (mainDtoReports.isEmpty() && zenDtoReports.isEmpty()) {
+                    logger.debug("Report data not found for MAIN and ZENKARE division");
+                    result.put("success", false);
+                    result.put("message", "report data not found");
+                    return result;
+                }
+
+                // create map to store separate reports
+                Map<String, List<DispatchReportDTO>> dtoReportForAllDivision = new HashMap<>();
+                dtoReportForAllDivision.put("MAIN", mainDtoReports);
+                dtoReportForAllDivision.put("ZENKARE", zenDtoReports);
+
+                result.put("data", dtoReportForAllDivision);
+                result.put("div_desc", "ALL");
+
+            } else {
+
+                String divisionDesc = dispatchReportDAO.getDivisionNameByDivId(registerDTO.getDivision());
+
+                List<DispatchReportDTO> reportDTOList = reports.stream()
+                        .map(DispatchReportDTO::new)
+                        .toList();
+
+                logger.debug("dispReg(0) :: {}", reports.get(0));
+
+                result.put("data", reportDTOList);
+                result.put("div_desc", divisionDesc);
+            }
 
             // get Location Name
             String branch = registerDTO.getBranch();
@@ -63,30 +141,21 @@ public class DispatchRegisterSubmitService {
 
             // Company name
             String compName = "HEALTHCARE PVT LTD.";    // for company_id=SNK
-            
-            String reportType = ("Y".equalsIgnoreCase(registerDTO.getReportType())) ? "Detailed" : "Summary";
-            
+
+            String reportType = ("Y".equalsIgnoreCase(registerDTO.getReportType())) ? "Detail" : "Summary";
+
             String finYearRange = dispatchReportDAO.getFinancialYearByFinYearId(Integer.parseInt(registerDTO.getFinancialYear()));
 
             String reportDate = registerDTO.getStartDate() + " To " + registerDTO.getEndDate();
 
-            String divisionDesc = dispatchReportDAO.getDivisionNameByDivId(registerDTO.getDivision());
-
             String currentDateTime = CommonUtil.getCurrentDateTime();
-
-            int size = reportDTOList.size();
-
-            // Excel file path
-            String filePath = "D:\\RAHUL\\TASK\\Dispatch details report summary\\DispatchDetailsReport\\module-resource\\Dispatch-Register-Summary.xlsx";
 
             result.put("success", true);
             result.put("message", "Dispatch data fetched successfully");
-            result.put("data", reportDTOList);
             result.put("total_records", size);
             result.put("loc_name", locationName);
             result.put("comp_name", compName);
             result.put("report_type", reportType);
-            result.put("div_desc", divisionDesc);
             result.put("fin_year_range", finYearRange);
             result.put("report_date", reportDate);
             result.put("date_time", currentDateTime);
@@ -98,6 +167,25 @@ public class DispatchRegisterSubmitService {
             result.put("message", "Error: " + e.getMessage());
         }
         return result;
+    }
+
+    private Map<String, List<DispatchReport>> getReportForAllDivision(DispatchRegisterDTO registerDTO) {
+        Map<String, List<DispatchReport>> data = new HashMap<>();
+
+        if (!"0".equals(registerDTO.getDivision())) {
+            return data;
+        }
+
+        registerDTO.setDivision("317"); //MAIN
+        List<DispatchReport> reports = dispatchReportDAO.callDispatchRegisterProcedure(registerDTO);
+        data.put("MAIN", reports);
+
+        // getting DispatchRegister list
+        registerDTO.setDivision("1524"); //ZENKARE
+        reports = dispatchReportDAO.callDispatchRegisterProcedure(registerDTO);
+        data.put("ZENKARE", reports);
+
+        return data;
     }
 
     public String[] isAllDataValid(DispatchRegisterDTO registerDTO) {
@@ -295,7 +383,7 @@ public class DispatchRegisterSubmitService {
             LocalDate startDt = CommonUtil.parseDate(startDtStr);
             LocalDate endDt = CommonUtil.parseDate(endDtStr);
 
-            if(startDt == null || endDt == null || dbStartDt == null || dbEndDt == null) {
+            if (startDt == null || endDt == null || dbStartDt == null || dbEndDt == null) {
                 logger.debug("Entered range extends beyond the financial year.");
                 res[0] = "false";
                 res[1] = "Entered range extends beyond the financial year.";
