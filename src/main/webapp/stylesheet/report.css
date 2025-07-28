@@ -68,14 +68,18 @@ body {
     overflow: hidden;
 }
 
-.division-label {
-    color: var(--c-red);
-    font-size: 0.75rem;
-    background-color: var(--c-light-yellow);
+.division-td {
+    background-color: var(--c-light-yellow) !important;
     padding-block: 0.2rem;
     padding-left: 0.2rem;
     border-inline: 0.1px solid #aaa;
     border-bottom: 1px solid #aaa;
+    overflow: hidden;
+}
+
+.division-label {
+    color: var(--c-red);
+    font-size: 0.75rem;
 }
 
 table {
@@ -156,21 +160,22 @@ table {
     overflow-y: hidden;
 }
 
-.fixed-body::-webkit-scrollbar:vertical {
+.division-row::-webkit-scrollbar,
+.division-td::-webkit-scrollbar {
     width: 0px;
     background: transparent;
 }
 
 
 .scroll-header {
-    max-width: calc(100% - 53.5%);
+    max-width: calc(100% - 62%);
     overflow-y: scroll;
     overflow-x: hidden;
 }
 
 
 .scroll-body {
-    max-width: calc(100% - 53.5%);
+    max-width: calc(100% - 62%);
     overflow: scroll;
 }
 
@@ -185,78 +190,101 @@ table {
 /* SET FIXED MIN WIDTH */
 .tran {
     min-width: 8rem;
+    max-width: 8rem;
 }
 
 .disp-date {
     min-width: 7rem;
+    max-width: 7rem;
 }
 
 .party {
     min-width: 20rem;
+    max-width: 20rem;
 }
 
 .dest {
     min-width: 12rem;
+    max-width: 12rem;
 }
 
 .transp {
     min-width: 16rem;
+    max-width: 16rem;
 }
 
 .goods-val {
     min-width: 7rem;
+    max-width: 7rem;
 }
 
 .inv-no {
     min-width: 10rem;
+    max-width: 10rem;
 }
 
 .lr-no {
     min-width: 8rem;
+    max-width: 8rem;
 }
 
 .driv-no {
-    min-width: 10rem;
+    min-width: 9rem;
+    max-width: 9rem;
 }
 
 .lorry-no {
     min-width: 6rem;
+    max-width: 6rem;
 }
 
 .lr-date {
     min-width: 7rem;
+    max-width: 7rem;
 }
 
 .disp-delay {
     min-width: 6rem;
+    max-width: 6rem;
 }
 
 .cases {
-    min-width: 7rem;
+    min-width: 6rem;
+    max-width: 6rem;
 }
 
 .form-no {
     min-width: 5rem;
+    max-width: 5rem;
 }
 
 .form-date {
     min-width: 7rem;
+    max-width: 7rem;
 }
 
 .form-val {
     min-width: 6rem;
+    max-width: 6rem;
 }
 
 .pod-date {
     min-width: 7rem;
+    max-width: 7rem;
 }
 
 .pod-num {
     min-width: 5rem;
+    max-width: 5rem;
 }
 
 .reason {
-    min-width: 10rem;
+    min-width: 8rem;
+    max-width: 8rem;
 }
 
+.division {
+    min-width: 5rem;
+    max-width: 5rem;
+}
 

@@ -9,10 +9,13 @@ import com.ddr.util.CommonUtil;
 import com.ddr.util.LoggerUtil;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
 
 public class DispatchRegisterSubmitService {
 
@@ -85,21 +88,22 @@ public class DispatchRegisterSubmitService {
                 return result;
             }
 
-            List<DispatchReportDTO> reportDtoMainList = null;
-            List<DispatchReportDTO> reportDtoZenList = null;
             if ("0".equals(registerDTO.getDivision())) {
-
+                // MAIN division report DTO
                 List<DispatchReportDTO> mainDtoReports = reports.stream()
                         .filter(dr -> "MAIN".equals(dr.getDivision()))
                         .map(DispatchReportDTO::new)
                         .toList();
                 logger.debug("MAIN division list size >> [{}]", mainDtoReports.size());
+                BigDecimal mainDivisionTotal = getTotalGoodsValue(mainDtoReports, DispatchReportDTO::getGoodsValue);
 
+                // ZENKARE division report DTO
                 List<DispatchReportDTO> zenDtoReports = reports.stream()
                         .filter(dr -> "ZENKARE".equals(dr.getDivision()))
                         .map(DispatchReportDTO::new)
                         .toList();
                 logger.debug("ZENKARE division list size >> [{}]", zenDtoReports.size());
+                BigDecimal zenDivisionTotal = getTotalGoodsValue(zenDtoReports, DispatchReportDTO::getGoodsValue);
 
                 if (mainDtoReports.isEmpty() && zenDtoReports.isEmpty()) {
                     logger.debug("Report data not found for MAIN and ZENKARE division");
@@ -113,6 +117,8 @@ public class DispatchRegisterSubmitService {
                 dtoReportForAllDivision.put("MAIN", mainDtoReports);
                 dtoReportForAllDivision.put("ZENKARE", zenDtoReports);
 
+                result.put("main_div_total", mainDivisionTotal);
+                result.put("zen_div_total", zenDivisionTotal);
                 result.put("data", dtoReportForAllDivision);
                 result.put("div_desc", "ALL");
 
@@ -150,6 +156,8 @@ public class DispatchRegisterSubmitService {
 
             String currentDateTime = CommonUtil.getCurrentDateTime();
 
+            BigDecimal grandTotal = getTotalGoodsValue(reports, DispatchReport::getGoodsValue);
+
             result.put("success", true);
             result.put("message", "Dispatch data fetched successfully");
             result.put("total_records", size);
@@ -159,6 +167,7 @@ public class DispatchRegisterSubmitService {
             result.put("fin_year_range", finYearRange);
             result.put("report_date", reportDate);
             result.put("date_time", currentDateTime);
+            result.put("grand_total", grandTotal);
             return result;
 
         } catch (Exception e) {
@@ -169,24 +178,14 @@ public class DispatchRegisterSubmitService {
         return result;
     }
 
-    private Map<String, List<DispatchReport>> getReportForAllDivision(DispatchRegisterDTO registerDTO) {
-        Map<String, List<DispatchReport>> data = new HashMap<>();
-
-        if (!"0".equals(registerDTO.getDivision())) {
-            return data;
-        }
-
-        registerDTO.setDivision("317"); //MAIN
-        List<DispatchReport> reports = dispatchReportDAO.callDispatchRegisterProcedure(registerDTO);
-        data.put("MAIN", reports);
-
-        // getting DispatchRegister list
-        registerDTO.setDivision("1524"); //ZENKARE
-        reports = dispatchReportDAO.callDispatchRegisterProcedure(registerDTO);
-        data.put("ZENKARE", reports);
-
-        return data;
+    private <T> BigDecimal getTotalGoodsValue(List<T> list, Function<T, BigDecimal> getter) {
+        return list == null ? BigDecimal.ZERO :
+                list.stream()
+                        .map(getter)
+                        .filter(Objects::nonNull)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
 
     public String[] isAllDataValid(DispatchRegisterDTO registerDTO) {
 

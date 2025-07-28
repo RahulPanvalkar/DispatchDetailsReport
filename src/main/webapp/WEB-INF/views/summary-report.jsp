@@ -73,6 +73,7 @@
                                             <th class="transp"><div class="header-name"><span>TRANSPORTER</span></div></th>
                                             <th class="goods-val"><div class="header-name text-right"><span>GOODS</span><span>VALUE</span></div></th>
                                             <th class="inv-no"><div class="header-name"><span>INVOICE</span><span>NO</span></div></th>
+                                            <th class="division"><div class="header-name"><span>DIVISION</span></div></th>
                                             <th class="lr-no"><div class="header-name text-right">LR NO</div></th>
                                             <th class="driv-no"><div class="header-name"><span>DRIVER</span><span>NAME</span></div></th>
                                             <th class="lorry-no"><div class="header-name"><span>LORRY</span><span>NUMBER</span></div></th>
@@ -92,13 +93,10 @@
                         </td>
                     </tr>
 
-                    <tr class="outer-tbl-tr">
-                        <td class="outer-tbl-td fixed-table"> <div id="divLabel" class="division-label">Division : MAIN</div></td>
-                        <td class="outer-tbl-td"> <div class="division-label  scroll-header"><span>&nbsp;</span></div></td>
-                    </tr>
 
                     <!-- Data Row Tables -->
                     <tr class="outer-tbl-tr">
+
                         <td class="outer-tbl-td">
                             <div class="fixed-body">
                                 <table id="fixed-body-table" class="inner-tbl fixed-table">

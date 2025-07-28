@@ -24,6 +24,7 @@ public class DispatchReportDTO {
     private String podDateStr;  // POD DATE
     private int podNum;     // POD NUMBER
     private String podReason;   // REASON
+    private String division;
 
     public DispatchReportDTO() {
     }
@@ -52,6 +53,7 @@ public class DispatchReportDTO {
         this.cFormValue = dispatchReport.getcFormValue();
         this.podNum = dispatchReport.getPodNum();
         this.podReason = dispatchReport.getPodReason();
+        this.division = dispatchReport.getDivision();
     }
 
 
@@ -205,5 +207,13 @@ public class DispatchReportDTO {
 
     public void setPodReason(String podReason) {
         this.podReason = podReason;
+    }
+
+    public String getDivision() {
+        return division;
+    }
+
+    public void setDivision(String division) {
+        this.division = division;
     }
 }
