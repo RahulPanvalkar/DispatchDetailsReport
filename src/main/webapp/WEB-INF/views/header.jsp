@@ -8,5 +8,3 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <!-- jQuery UI Library -->
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-
-<script src="${pageContext.request.contextPath}/script/main.js"></script>

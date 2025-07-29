@@ -5,11 +5,7 @@ $(document).ready(function() {
     $(".datePicker").datepicker({
         changeMonth: true,
         changeYear: true,
-        //yearRange: "-100:-18", // to select from 100 to 18 years ago
-        dateFormat: "dd/mm/yy",
-        //defaultDate: "-18y",   // default position to 18 years ago
-        //maxDate: "-18Y",       // Max date is 18 years ago
-        //minDate: "-100Y"       // Min date is 100 years ago
+        dateFormat: "dd/mm/yy"
     });
 
     // GENERIC FUNCTION TO SEND AJAX REQUEST
@@ -106,13 +102,27 @@ $(document).ready(function() {
             $('#customer').empty();
             $('#customer').append(
                 $('<option>', {
-                    value: "0",
-                    text: "All"
+                    value: "",
+                    text: "Select"
                 })
             );
             makeAjaxRequest("get-data?type=stockPointList", handleStockPointData);
             return;
         }
+        if(branchId === '0') {
+            // Set stockPoint as 'All'
+            $('#stockPoint').empty();
+            $('#stockPoint').append(
+                $('<option>', {
+                    value: "0",
+                    text: "All",
+                    selected: true
+                })
+            );
+            $('#stockPoint').trigger("change");
+            return;
+        }
+
         // change stock point
         makeAjaxRequest(`get-data?type=stockPoint&locId=${branchId}`, setStockPointByBranch);
         // change customer list
@@ -185,8 +195,8 @@ $(document).ready(function() {
         if(!divisionList || divisionList.length === 0){
             $('#division').append(
                 $('<option>', {
-                    value: "",
-                    text: "Select"
+                    value: "0",
+                    text: "All"
                 })
             );
             return;
@@ -228,7 +238,9 @@ $(document).ready(function() {
             $('#financialYear').append(
                 $('<option>', {
                     value: financialYear.fin_year_id,
-                    text: `${financialYear.start_dt} To ${financialYear.end_dt}`
+                    text: `${financialYear.start_dt} To ${financialYear.end_dt}`,
+                    'data-start': financialYear.start_dt,
+                    'data-end': financialYear.end_dt
                 })
             );
         });
@@ -302,6 +314,37 @@ $(document).ready(function() {
 
     makeAjaxRequest("get-data?type=default", handleDefaultDataList);
 
+    $('#reset-btn').on('click', function(){
+        console.log("reset button clicked..");
+
+        $('#stockPoint').empty();
+        $('#stockPoint').append(
+            $('<option>', {
+                value: "",
+                text: "Select"
+            })
+        );
+
+        $('#customer').empty();
+        $('#customer').append(
+            $('<option>', {
+                value: "",
+                text: "Select"
+            })
+        );
+
+        $('#financialYear').empty();
+        $('#financialYear').append(
+            $('<option>', {
+                value: "",
+                text: "Select"
+            })
+        );
+
+        $('#startDate').datepicker("setDate", "");
+        $('#endDate').datepicker("setDate", "");
+    });
+
     // VALIDATIONS
     // map to tract user input errors
     let errors = new Map([
@@ -342,13 +385,6 @@ $(document).ready(function() {
         // if isAllValid is false disable submit button
         toggleSubmitBtn(isAllValid);
     }
-
-    checkErrors(errors);
-
-    $('#submit-btn').on('click', function(event) {
-        //event.preventDefault();
-        console.log("submit button clicked::", event.target.id);
-    });
 
 
     // Validate branch
@@ -420,7 +456,7 @@ $(document).ready(function() {
             $("#branchCheck").show();
             $("#branchCheck").html("Branch is required");
             return false;
-        } else if (!regex.test(branch) || branch === '0') {
+        } else if (!regex.test(branch)) {
                 $("#branchCheck").show();
                 $("#branchCheck").html("Invalid Branch");
                 //$("#branch").html("");
@@ -440,7 +476,7 @@ $(document).ready(function() {
         if (!stockPoint) {
             $("#stockPointCheck").show().html("Stock Point is required");
             return false;
-        } else if (!regex.test(stockPoint) || stockPoint === '0') {
+        } else if (!regex.test(stockPoint)) {
              $("#stockPointCheck").show();
              $("#stockPointCheck").html("Invalid stock point");
              //$("#branch").html("");
@@ -460,7 +496,7 @@ $(document).ready(function() {
         if (!division) {
             $("#divisionCheck").show().html("Division is required");
             return false;
-        } else if (!regex.test(division) || division === '0') {
+        } else if (!regex.test(division)) {
             $("#divisionCheck").show();
             $("#divisionCheck").html("Invalid division");
             //$("#branch").html("");
@@ -524,7 +560,7 @@ $(document).ready(function() {
         }
 
         let startDate = $("#startDate").val();
-        console.log(startDate);
+        console.log("startDate :: ", startDate);
 
         let regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/([0-9]{4})$/;
 
@@ -534,7 +570,34 @@ $(document).ready(function() {
         }  else if (!regex.test(startDate)) {
             $("#startDtCheck").show();
             $("#startDtCheck").html("Invalid start date format");
-            $("#startDate").datepicker("setDate", null);
+//            $("#startDate").datepicker("setDate", null);
+            return false;
+        }
+
+        let startDDt = parseDateString(startDate);
+
+        let endDate = $("#endDate").val();
+        console.log("endDate :: ", endDate);
+        if(endDate){
+            let endDDt = parseDateString(endDate);
+            if(startDDt > endDDt) {
+                $("#startDtCheck").show();
+                $("#startDtCheck").html("Start date can not be greater than end date");
+                return false;
+            }
+        }
+
+        let selectedOption = $("#financialYear").find(":selected");
+        let finStart = selectedOption.data("start"); // e.g., "01/04/2024"
+        let finEnd = selectedOption.data("end");     // e.g., "31/03/2025"
+        console.log("finStart >> ",finStart, " :: finEnd >> ",finEnd);
+
+
+        let finStartDate = parseDateString(finStart);
+        let finEndDate = parseDateString(finEnd);
+
+        if (startDDt < finStartDate || startDDt > finEndDate) {
+            $("#startDtCheck").show().html("Start date is outside selected financial year.");
             return false;
         }
 
@@ -563,8 +626,34 @@ $(document).ready(function() {
         }  else if (!regex.test(endDate)) {
              $("#endDtCheck").show();
              $("#endDtCheck").html("Invalid End date format");
-             $("#endDate").html("");
+             //$("#startDate").datepicker("setDate", null);
              return false;
+        }
+
+        let endDDt = parseDateString(endDate);
+
+        let startDate = $("#startDate").val();
+        console.log("startDate :: ", endDate);
+        if(startDate){
+            let startDDt = parseDateString(startDate);
+            if(startDDt > endDDt) {
+                $("#endDtCheck").show();
+                $("#endDtCheck").html("End date can not be less than start date");
+                return false;
+            }
+        }
+
+        let selectedOption = $("#financialYear").find(":selected");
+        let finStart = selectedOption.data("start"); // e.g., "01/04/2024"
+        let finEnd = selectedOption.data("end");     // e.g., "31/03/2025"
+        console.log("validateEndDate >> finStart >> ",finStart, " :: finEnd >> ",finEnd);
+
+        let finStartDate = parseDateString(finStart);
+        let finEndDate = parseDateString(finEnd);
+
+        if (endDDt < finStartDate || endDDt > finEndDate) {
+            $("#endDtCheck").show().html("End date is outside selected financial year.");
+            return false;
         }
 
         $("#endDtCheck").hide();

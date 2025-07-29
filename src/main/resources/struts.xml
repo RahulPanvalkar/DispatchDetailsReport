@@ -21,9 +21,17 @@
             <result>/WEB-INF/views/summary-report.jsp</result>
         </action>
 
-        <action name="dispatch-register-submit" class="com.ddr.actions.DispatchRegisterSubmitAction" method="submit">
+        <action name="dispatch-register-submit" class="com.ddr.actions.DispatchRegisterFormAction" method="submit">
             <result name="success" type="redirect">summary-report</result>
             <result name="error">/WEB-INF/views/dispatch-register.jsp</result>
+        </action>
+
+        <action name="download-file" class="com.ddr.actions.SummaryReportAction" method="downloadExcel">
+            <result name="success"/>
+            <result name="error" type="redirectAction">
+                <param name="actionName">summary-report</param>
+                <param name="message">${message}</param>
+            </result>
         </action>
     </package>
 
@@ -37,7 +45,7 @@
             </result>
         </action>
 
-        <action name="dispatch-register-data" class="com.ddr.actions.DispatchRegisterSubmitAction" method="getDispatchDataFromSession">
+        <action name="dispatch-register-data" class="com.ddr.actions.SummaryReportAction" method="getDispatchDataFromSession">
             <result name="success" type="json">
                 <param name="root">result</param>
             </result>

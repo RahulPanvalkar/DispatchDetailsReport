@@ -1,0 +1,290 @@
+:root {
+    --c-light-yellow: rgb(253, 240, 221);
+    --c-red: rgb(171, 84, 92);
+    --c-light-gray: rgb(224, 224, 224);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+/*-- SUMMARY REPORT PAGE --*/
+body {
+    font-family: Arial, sans-serif;
+    margin: 1.25rem;
+    font-size: 0.8rem;
+}
+
+.loader-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+
+.main-div {
+    border: 1px solid var(--c-primary-dark);
+    padding: 1rem;
+}
+
+.header, .sub-header {
+    text-align: center;
+}
+
+.header h2, h3, .sub-header p {
+    margin-block: 0.5rem;
+}
+
+.date-time {
+    float: left;
+}
+
+.financial-year {
+    float: right;
+}
+
+.btn {
+    text-decoration: none;
+    padding: 0.35rem 1rem;
+    background: var(--c-btn-bg);
+    color: var(--c-white);
+    border-radius: 0.2rem;
+    margin-top: 0.5rem;
+    cursor: pointer;
+}
+
+.btn-right {
+    text-align: right !important;
+}
+
+.report-container {
+    margin-top: 0.35rem;
+    overflow: hidden;
+}
+
+.division-td {
+    background-color: var(--c-light-yellow) !important;
+    padding-block: 0.2rem;
+    padding-left: 0.2rem;
+    border-inline: 0.1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    overflow: hidden;
+}
+
+.division-label {
+    color: var(--c-red);
+    font-size: 0.75rem;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.outer-tbl-tr, .inner-tbl-tr {
+    padding: 0;
+}
+
+.outer-tbl-td {
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+
+.inner-tbl-tr th,
+.inner-tbl-tr td {
+    /*min-width: 8rem;*/
+    border: 1px solid #aaa;
+    padding: 0.2rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    background-color: white;
+}
+
+
+.inner-tbl-tr th {
+    /*min-width: 8rem;*/
+    background-color: var(--c-light-gray);
+    /*padding: 0.5rem 0.5rem;*/
+    color: var(--c-primary);
+}
+
+.header-name {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+#download {
+    display: flex;
+    align-self: end;
+    cursor: pointer;
+}
+
+#download img {
+    width: 1.35rem;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.fixed-table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.fixed-body, .scroll-body {
+    max-height: 25vh;
+}
+
+.fixed-body {
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.division-row::-webkit-scrollbar,
+.division-td::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+
+.scroll-header {
+    max-width: calc(100% - 62%);
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+
+.scroll-body {
+    max-width: calc(100% - 62%);
+    overflow: scroll;
+}
+
+
+
+.style {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* SET FIXED MIN WIDTH */
+.tran {
+    min-width: 8rem;
+    max-width: 8rem;
+}
+
+.disp-date {
+    min-width: 7rem;
+    max-width: 7rem;
+}
+
+.party {
+    min-width: 20rem;
+    max-width: 20rem;
+}
+
+.dest {
+    min-width: 12rem;
+    max-width: 12rem;
+}
+
+.transp {
+    min-width: 16rem;
+    max-width: 16rem;
+}
+
+.goods-val {
+    min-width: 7rem;
+    max-width: 7rem;
+}
+
+.inv-no {
+    min-width: 10rem;
+    max-width: 10rem;
+}
+
+.lr-no {
+    min-width: 8rem;
+    max-width: 8rem;
+}
+
+.driv-no {
+    min-width: 9rem;
+    max-width: 9rem;
+}
+
+.lorry-no {
+    min-width: 6rem;
+    max-width: 6rem;
+}
+
+.lr-date {
+    min-width: 7rem;
+    max-width: 7rem;
+}
+
+.disp-delay {
+    min-width: 6rem;
+    max-width: 6rem;
+}
+
+.cases {
+    min-width: 6rem;
+    max-width: 6rem;
+}
+
+.form-no {
+    min-width: 5rem;
+    max-width: 5rem;
+}
+
+.form-date {
+    min-width: 7rem;
+    max-width: 7rem;
+}
+
+.form-val {
+    min-width: 6rem;
+    max-width: 6rem;
+}
+
+.pod-date {
+    min-width: 7rem;
+    max-width: 7rem;
+}
+
+.pod-num {
+    min-width: 5rem;
+    max-width: 5rem;
+}
+
+.reason {
+    min-width: 8rem;
+    max-width: 8rem;
+}
+
+.division {
+    min-width: 5rem;
+    max-width: 5rem;
+}
+

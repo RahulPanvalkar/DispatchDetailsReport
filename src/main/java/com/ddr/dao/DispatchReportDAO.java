@@ -39,7 +39,22 @@ public class DispatchReportDAO {
             stmt.setString(10, "N"); // DETAILED
             stmt.setString(11, "10"); // STOCKPOINTID*/
 
-            stmt.setString(2, "CURRENT"); // FIN_YR_FLAG -- CURRENT/PREVIOUS
+            String finYearFlag = "CURRENT";
+            String sql = "SELECT FIN_YEAR_CLOSED FROM FINANCIAL_YEAR WHERE FIN_YEAR_ID = ?";
+            try(PreparedStatement ps = conn.prepareStatement(sql)){
+                ps.setString(1, dto.getFinancialYear());
+                logger.debug("Query : [{}], Param : [{}]", sql, dto.getFinancialYear());
+
+                try(ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        String flag = rs.getString("FIN_YEAR_CLOSED");
+                        finYearFlag = ("N".equals(flag)) ? "CURRENT" : "PREVIOUS";
+                    }
+                }
+            }
+
+
+            stmt.setString(2, finYearFlag); // FIN_YR_FLAG -- CURRENT/PREVIOUS
             stmt.setInt(3, Integer.parseInt(dto.getFinancialYear()));   // FINYR_ID
             stmt.setString(4, "SNK"); // COMP_CD
             stmt.setString(5, dto.getBranch());  // LOCID
@@ -54,7 +69,7 @@ public class DispatchReportDAO {
             stmt.execute();
 
             logger.debug("Query : [{}], Param : [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]", query,
-                    OracleTypes.CURSOR, "CURRENT", dto.getFinancialYear(), "SNK", dto.getBranch(), dto.getStartDate(),
+                    OracleTypes.CURSOR, finYearFlag, dto.getFinancialYear(), "SNK", dto.getBranch(), dto.getStartDate(),
                     dto.getEndDate(), dto.getDivision(), dto.getCustomer(), dto.getReportType(), dto.getStockPoint());
 
             // Get the cursor (result set)
@@ -77,8 +92,9 @@ public class DispatchReportDAO {
                     dispReg.setNoOfCases(rs.getInt("NO_OF_CASES"));
                     dispReg.setFormNum(rs.getString("FORM_NUM"));
                     dispReg.setcFormValue(rs.getInt("CFORM_VALUE"));
-                    dispReg.setPodNum(rs.getInt("POD_NUM"));
+                    //dispReg.setPodNum(rs.getInt("POD_NUM"));
                     dispReg.setPodReason(rs.getString("POD_REASON"));
+                    dispReg.setDivision(rs.getString("DIVISION"));
 
                     dispReg.setLrDate(CommonUtil.parseDate(rs.getString("LR_DATE")));
                     dispReg.setcFormDate(CommonUtil.parseDate(rs.getString("CFORM_DATE")));
@@ -158,5 +174,33 @@ public class DispatchReportDAO {
             throw new RuntimeException(e);
         }
         return "";
+    }
+
+    public String getFinancialYearByFinYearId(int finYearId) {
+        String finYear = "";
+        String sql = "SELECT FIN_YEAR_ID, START_DT, END_DT FROM FINANCIAL_YEAR WHERE FIN_YEAR_ID = ?";
+
+        try (Connection conn = DBConnectionManager.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, finYearId);
+
+            logger.debug("Query : [{}], Param : [{}]", sql, finYearId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String startDt = CommonUtil.convertToString(rs.getDate("START_DT"));
+                    String endDt = CommonUtil.convertToString(rs.getDate("END_DT"));
+
+                    finYear = startDt + " To " + endDt;
+
+                }
+                logger.debug("Financial Year dates :: finYear >> {}", finYear);
+            }
+
+        } catch (Exception e) {
+            logger.error("Exception occurred while getting Financial Year >> ", e);
+            throw new RuntimeException(e);
+        }
+        return finYear;
     }
 }
