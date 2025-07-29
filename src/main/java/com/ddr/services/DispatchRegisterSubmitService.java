@@ -181,9 +181,9 @@ public class DispatchRegisterSubmitService {
     private <T> BigDecimal getTotalGoodsValue(List<T> list, Function<T, BigDecimal> getter) {
         return list == null ? BigDecimal.ZERO :
                 list.stream()
-                        .map(getter)
-                        .filter(Objects::nonNull)
-                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+                    .map(getter)
+                    .filter(Objects::nonNull)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 
