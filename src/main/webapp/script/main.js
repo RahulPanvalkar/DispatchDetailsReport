@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    console.log("page loaded >> jquery working..");
+   //console.log("page loaded >> jquery working..");
 
     // Initialize Datepicker for DATE fields and set min max value
     $(".datePicker").datepicker({
@@ -10,7 +10,7 @@ $(document).ready(function() {
 
     // GENERIC FUNCTION TO SEND AJAX REQUEST
     function makeAjaxRequest(URL, callback) {
-        console.log("sending ajax request to >> [",URL,"]");
+       //console.log("sending ajax request to >> [",URL,"]");
         $.ajax({
             url: URL,
             type: 'GET',
@@ -28,7 +28,7 @@ $(document).ready(function() {
 
     // FUNCTION TO HANDLE DEFAULT DATA LIST
     function handleDefaultDataList(response) {
-        console.log("handleDefaultDataList >> response >> ", response);
+       //console.log("handleDefaultDataList >> response >> ", response);
         let data = response.data;
 
         // Check if the response contains data
@@ -85,10 +85,10 @@ $(document).ready(function() {
         });
     }
 
-    // TO CHANGE STOCK POINT VALUE BASED ON BRANCH
+    // TO CHANGE STOCK POINT and CUSTOMER VALUE BASED ON BRANCH
     $("#branch").on("change", function() {
         let branchId = $(this).val();
-        console.log("branchId >> ", branchId);
+       //console.log("branchId >> ", branchId);
         if(!branchId) {
             // set stock point
             $('#stockPoint').empty();
@@ -120,6 +120,23 @@ $(document).ready(function() {
                 })
             );
             $('#stockPoint').trigger("change");
+
+            // Set stockPoint as 'All'
+            $('#customer').empty();
+            $('#customer').append(
+                $('<option>', {
+                    value: "",
+                    text: "Select"
+                }),
+                $('<option>', {
+                    value: "0",
+                    text: "All",
+                    selected: true
+                })
+            );
+            //$('#customer').trigger("change");
+            // change customer list
+            makeAjaxRequest(`get-data?type=customerList&locId=${branchId}`, setCustomerListByBranch);
             return;
         }
 
@@ -132,7 +149,7 @@ $(document).ready(function() {
     // FUNCTION TO SET STOCK POINT VALUE BASED ON BRANCH
     function setStockPointByBranch(response) {
         let stockPoint = response.data;
-        console.log("json stockPoint >> ", stockPoint);
+       //console.log("json stockPoint >> ", stockPoint);
         $('#stockPoint').empty();
         // if stock point not found
         if(!stockPoint){
@@ -158,13 +175,18 @@ $(document).ready(function() {
     // FUNCTION TO SET CUSTOMER LIST BASED ON BRANCH
     function setCustomerListByBranch(response) {
         let customerList = response.data;
-        console.log("json customerList >> ", stockPoint);
+       //console.log("json customerList >> ", stockPoint);
         $('#customer').empty();
         // All customer option
         $('#customer').append(
             $('<option>', {
+                value: "",
+                text: "Select"
+            }),
+            $('<option>', {
                 value: "0",
-                text: "All"
+                text: "All",
+                selected: true
             })
         );
 
@@ -254,7 +276,7 @@ $(document).ready(function() {
     // FUNCTION TO SET START DATE & END DATE
     function handleFinYearDates(response) {
         let finYearDates = response.data;
-        console.log("json finYearDates >> ", finYearDates);
+       //console.log("json finYearDates >> ", finYearDates);
         // if financial year dates not found
         if(!finYearDates || finYearDates.length === 0){
             // Set values to empty
@@ -282,7 +304,7 @@ $(document).ready(function() {
         const startDateObj = parseDateString(startDtStr);
         const endDateObj = parseDateString(endDtStr);
 
-        console.log("setDateValues >> start:", startDateObj, "end:", endDateObj);
+       //console.log("setDateValues >> start:", startDateObj, "end:", endDateObj);
 
         $('.datePicker').datepicker("option", {
             minDate: startDateObj,
@@ -297,7 +319,7 @@ $(document).ready(function() {
     // TO CHANGE START DATE & END DATE VALUES BASED ON FINANCIAL YEAR
     $("#financialYear").on("change", function() {
         let finYearId = $(this).val();
-        console.log("finYearId >> ", finYearId);
+       //console.log("onChange >> finYearId >> ", finYearId);
         if(!finYearId) {
             $('#startDate').datepicker("setDate", "");
             $('#endDate').datepicker("setDate", "");
@@ -315,7 +337,7 @@ $(document).ready(function() {
     makeAjaxRequest("get-data?type=default", handleDefaultDataList);
 
     $('#reset-btn').on('click', function(){
-        console.log("reset button clicked..");
+       //console.log("reset button clicked..");
 
         $('#stockPoint').empty();
         $('#stockPoint').append(
@@ -371,7 +393,7 @@ $(document).ready(function() {
 
     // function to check user input errors and if any occurred, disable Submit button
     function checkErrors(errors) {
-        console.log("checkErrors: ", errors);
+       //console.log("checkErrors: ", errors);
         let isAllValid = true;
 
         for (let [key, value] of errors) {
@@ -381,7 +403,7 @@ $(document).ready(function() {
                 break;
             }
         }
-        console.log("isAllValid", isAllValid);
+       //console.log("isAllValid", isAllValid);
         // if isAllValid is false disable submit button
         toggleSubmitBtn(isAllValid);
     }
@@ -446,9 +468,9 @@ $(document).ready(function() {
 
     // function to validate fields
     function validateBranch() {
-        console.log("validateBranch is called..");
+       //console.log("validateBranch is called..");
         let branch = $("#branch").val();
-        console.log(branch);
+       //console.log("-- branch >> ", branch);
 
         let regex = /^[0-9]+$/;
 
@@ -468,9 +490,9 @@ $(document).ready(function() {
     }
 
     function validateStockPoint() {
-        console.log("validateStockPoint is called..");
+       //console.log("validateStockPoint is called..");
         let stockPoint = $("#stockPoint").val();
-        console.log(stockPoint);
+       //console.log("-- stockPoint >> ", stockPoint);
 
         let regex = /^[0-9]+$/;
         if (!stockPoint) {
@@ -488,9 +510,9 @@ $(document).ready(function() {
     }
 
     function validateDivision() {
-        console.log("validateDivision is called..");
+       //console.log("validateDivision is called..");
         let division = $("#division").val();
-        console.log(division);
+       //console.log("-- division >> ", division);
 
         let regex = /^[0-9]+$/;
         if (!division) {
@@ -508,9 +530,9 @@ $(document).ready(function() {
     }
 
     function validateReportType() {
-        console.log("validateReportType is called..");
+       //console.log("validateReportType is called..");
         let reportType = $("#reportType").val();
-        console.log(reportType);
+       //console.log("-- reportType >> ", reportType);
 
         if (!reportType) {
             $("#reportTypeCheck").show().html("Report Type is required");
@@ -522,9 +544,9 @@ $(document).ready(function() {
     }
 
     function validateCustomer() {
-        console.log("validateCustomer is called..");
+       //console.log("validateCustomer is called..");
         let customer = $("#customer").val();
-        console.log(customer);
+       //console.log("-- customer >> ", customer);
 
         if (!customer) {
             $("#customerCheck").show().html("Customer is required");
@@ -536,9 +558,9 @@ $(document).ready(function() {
     }
 
     function validateFinancialYear() {
-        console.log("validateFinancialYear is called..");
+       //console.log("validateFinancialYear is called..");
         let finYear = $("#financialYear").val();
-        console.log(finYear);
+       //console.log("-- finYear >> ", finYear);
 
         if (!finYear) {
             $("#finYearCheck").show().html("Financial Year is required");
@@ -550,7 +572,7 @@ $(document).ready(function() {
     }
 
     function validateStartDate() {
-        console.log("validateStartDate is called..");
+       //console.log("validateStartDate is called..");
 
         let finYearId = $("#financialYear").val();
         if(!finYearId) {
@@ -560,7 +582,7 @@ $(document).ready(function() {
         }
 
         let startDate = $("#startDate").val();
-        console.log("startDate :: ", startDate);
+       //console.log("startDate :: ", startDate);
 
         let regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/([0-9]{4})$/;
 
@@ -577,7 +599,7 @@ $(document).ready(function() {
         let startDDt = parseDateString(startDate);
 
         let endDate = $("#endDate").val();
-        console.log("endDate :: ", endDate);
+       //console.log("endDate :: ", endDate);
         if(endDate){
             let endDDt = parseDateString(endDate);
             if(startDDt > endDDt) {
@@ -590,7 +612,7 @@ $(document).ready(function() {
         let selectedOption = $("#financialYear").find(":selected");
         let finStart = selectedOption.data("start"); // e.g., "01/04/2024"
         let finEnd = selectedOption.data("end");     // e.g., "31/03/2025"
-        console.log("finStart >> ",finStart, " :: finEnd >> ",finEnd);
+       //console.log("finStart >> ",finStart, " :: finEnd >> ",finEnd);
 
 
         let finStartDate = parseDateString(finStart);
@@ -606,7 +628,7 @@ $(document).ready(function() {
     }
 
     function validateEndDate() {
-        console.log("validateEndDate is called..");
+       //console.log("validateEndDate is called..");
 
         let finYearId = $("#financialYear").val();
         if(!finYearId) {
@@ -616,7 +638,7 @@ $(document).ready(function() {
         }
 
         let endDate = $("#endDate").val();
-        console.log(endDate);
+       //console.log(endDate);
 
         let regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/([0-9]{4})$/;
 
@@ -633,7 +655,7 @@ $(document).ready(function() {
         let endDDt = parseDateString(endDate);
 
         let startDate = $("#startDate").val();
-        console.log("startDate :: ", endDate);
+       //console.log("startDate :: ", endDate);
         if(startDate){
             let startDDt = parseDateString(startDate);
             if(startDDt > endDDt) {
@@ -646,7 +668,7 @@ $(document).ready(function() {
         let selectedOption = $("#financialYear").find(":selected");
         let finStart = selectedOption.data("start"); // e.g., "01/04/2024"
         let finEnd = selectedOption.data("end");     // e.g., "31/03/2025"
-        console.log("validateEndDate >> finStart >> ",finStart, " :: finEnd >> ",finEnd);
+       //console.log("validateEndDate >> finStart >> ",finStart, " :: finEnd >> ",finEnd);
 
         let finStartDate = parseDateString(finStart);
         let finEndDate = parseDateString(finEnd);

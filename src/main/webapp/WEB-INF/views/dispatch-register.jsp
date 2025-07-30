@@ -1,21 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ page import="com.ddr.model.DispatchRegisterDTO" %>
 
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
-		<title>Dispatch Register</title>
-		<meta name='viewport' content='width=device-width, initial-scale=1'>
+        <meta charset="UTF-8">
+        <title>Dispatch Register</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
         <%@include file="./header.jsp" %>
         <script src="${pageContext.request.contextPath}/script/main.js"></script>
-        <script>
-            $(document).ready(function() {
-                console.log("makeAjaxRequest:", typeof makeAjaxRequest);
-                //makeAjaxRequest("get-data?type=default", handleDefaultDataList);
-            });
-        </script>
-	</head>
+
+        <%
+            DispatchRegisterDTO dto = (DispatchRegisterDTO) session.getAttribute("dispatch_dto");
+            System.out.println("previous dispachRegister dto >> "+dto);
+        %>
+
+    </head>
+
 	<body>
 	    <!-- alert message -->
         <s:if test="message != null">
@@ -112,5 +114,61 @@
                 </fieldset>
             </s:form>
         </main>
+
+
+        <s:if test="error">
+            <script>
+                var formData = {
+                    branch: "<%= dto != null ? dto.getBranch() : "" %>",
+                    stockPoint: "<%= dto != null ? dto.getStockPoint() : "" %>",
+                    division: "<%= dto != null ? dto.getDivision() : "" %>",
+                    reportType: "<%= dto != null ? dto.getReportType() : "" %>",
+                    financialYear: "<%= dto != null ? dto.getFinancialYear() : "" %>",
+                    customer: "<%= dto != null ? dto.getCustomer() : "" %>",
+                    startDate: "<%= dto != null ? dto.getStartDate() : "" %>",
+                    endDate: "<%= dto != null ? dto.getEndDate() : "" %>"
+                };
+
+                // Wait for dropdown to be populated before setting value
+                function setSelectValueWhenReady(selector, value) {
+                    const interval = setInterval(() => {
+                        const $select = $(selector);
+                        if ($select.find('option').length > 2) {
+                            $select.val(value);
+                            clearInterval(interval);
+                        }
+                    }, 100);
+                }
+
+                $(document).ready(function () {
+                    //console.log("##formData >> ", formData);
+                    // Set select values
+                    //setSelectValueWhenReady('#branch', formData.branch);
+                    //setSelectValueWhenReady('#stockPoint', formData.stockPoint);
+                    setSelectValueWhenReady('#division', formData.division);
+                    setSelectValueWhenReady('#financialYear', formData.financialYear);
+                    //setSelectValueWhenReady('#customer', formData.customer);
+
+                    // These fields don't depend on dropdown options
+                    $('#reportType').val(formData.reportType);
+                    $('#startDate').val(formData.startDate);
+                    $('#endDate').val(formData.endDate);
+
+                    setTimeout(() => {
+                        // trigger validation
+                        $('#reportType').trigger("change");
+                        $('#division').trigger("change");
+                        $('#financialYear').trigger("change");
+                        $('#startDate').trigger("change");
+                        $('#endDate').trigger("change");
+                    }, 500);
+                });
+            </script>
+        </s:if>
+
+        <%
+            session.removeAttribute("dispatch_dto");
+            System.out.println("after session cleared >> dto >> "+dto);
+        %>
 	</body>
 </html>

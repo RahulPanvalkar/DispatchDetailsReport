@@ -36,7 +36,7 @@
     </package>
 
     <package name="json" namespace="/" extends="json-default">
-        <action name="get-data" class="com.ddr.actions.DispatchRegisterFormAction">
+        <action name="get-data" class="com.ddr.actions.DispatchRegisterFormAction" method="getData">
             <result name="success" type="json">
                 <param name="root">result</param>
             </result>

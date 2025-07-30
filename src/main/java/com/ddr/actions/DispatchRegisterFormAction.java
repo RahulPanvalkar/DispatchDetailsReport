@@ -6,13 +6,13 @@ import com.ddr.services.DispatchRegisterSubmitService;
 import com.ddr.util.LoggerUtil;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ModelDriven;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class DispatchRegisterFormAction extends ActionSupport {
+public class DispatchRegisterFormAction extends ActionSupport implements ModelDriven<DispatchRegisterDTO> {
 
     private final Logger logger = LoggerUtil.getLogger(DispatchRegisterFormAction.class);
 
@@ -29,12 +29,11 @@ public class DispatchRegisterFormAction extends ActionSupport {
     private boolean success;
     private boolean error;
 
-    @Override
-    public String execute() {
-        logger.debug("execute method called..");
-        DispatchRegisterFormService service = new DispatchRegisterFormService();
-        logger.debug("type :: [{}]", this.type);
+    public String getData() {
+        logger.debug("getData method called >> type [{}]", this.type);
         this.type = (this.type == null || this.type.trim().isEmpty()) ? "" : this.type.trim();
+
+        DispatchRegisterFormService service = new DispatchRegisterFormService();
 
         switch (type) {
             case "default":
@@ -63,7 +62,7 @@ public class DispatchRegisterFormAction extends ActionSupport {
                 break;
             default: {
                 this.result.put("success", false);
-                this.result.put("message", "Unexpected error occurred");
+                this.result.put("message", "Data type required");
             }
         }
 
@@ -80,13 +79,15 @@ public class DispatchRegisterFormAction extends ActionSupport {
         result = service.getDispatchRegisterSubmit(this.dto);
 
         if (result == null || result.get("success") == null) {
+            ActionContext.getContext().getSession().put("dispatch_dto", this.dto);
             error = true;
             message = "Something went wrong!";
             return ERROR;
         } else if (!(Boolean) result.get("success")) {
+            ActionContext.getContext().getSession().put("dispatch_dto", this.dto);
             error = true;
             message = (String) result.get("message");
-             return ERROR;
+            return ERROR;
         }
 
         // stored it in session
@@ -138,6 +139,11 @@ public class DispatchRegisterFormAction extends ActionSupport {
 
     public void setError(boolean error) {
         this.error = error;
+    }
+
+    @Override
+    public DispatchRegisterDTO getModel() {
+        return dto;
     }
 }
 

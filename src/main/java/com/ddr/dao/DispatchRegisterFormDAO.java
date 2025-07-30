@@ -143,9 +143,19 @@ public class DispatchRegisterFormDAO {
                 "WHERE CM.CUST_ID=CA.CUST_ID AND CM.LOC_ID = ? " +
                 "AND (CM.DELETED ='N' OR CM.DELETED IS NULL) ORDER BY CM.CUST_NAME";
 
+        if (locId == 0) {
+            sql = "SELECT CM.CUST_ID, CM.CUST_NAME, CM.DESTINATION, CM.CUST_CD, CM.ERP_CUST_CD, CM.LOC_ID " +
+                    "FROM CUSTOMER_MASTER CM " +
+                    "JOIN CUSTOMER_ALLOCATION CA ON CM.CUST_ID = CA.CUST_ID " +
+                    "WHERE CM.LOC_ID IN (SELECT LOC_ID FROM DEPOT_MASTER) AND (CM.DELETED = 'N' OR CM.DELETED IS NULL) " +
+                    "ORDER BY CM.CUST_NAME";
+        }
+
         try (Connection conn = DBConnectionManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, locId);
+            if (locId != 0) {
+                ps.setInt(1, locId);
+            }
 
             logger.debug("Query : [{}], Param : [{}]", sql, locId);
 

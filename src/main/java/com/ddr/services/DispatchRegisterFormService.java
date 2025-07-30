@@ -162,7 +162,7 @@ public class DispatchRegisterFormService {
         Map<String, Object> result = new HashMap<>();
         try {
             logger.debug("locId ::: [{}]", locId);
-            if (locId <= 0) {
+            if (locId < 0) {
                 result.put("success", false);
                 result.put("message", "Invalid location id");
                 return result;
@@ -172,12 +172,13 @@ public class DispatchRegisterFormService {
 
             if (customerData == null || customerData.isEmpty()) {
                 result.put("success", false);
-                result.put("message", "Stock Point list not found");
+                result.put("message", "Customer list not found");
                 return result;
             }
             result.put("success", true);
             result.put("message", "Request successful");
             result.put("data", customerData);
+            result.put("cust_count", customerData.size());
             return result;
 
         } catch (RuntimeException e) {
