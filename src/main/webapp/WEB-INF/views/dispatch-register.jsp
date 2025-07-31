@@ -19,14 +19,20 @@
     </head>
 
 	<body>
-	    <!-- alert message -->
+	    <!-- alert message
         <s:if test="message != null">
             <script>
                 $(document).ready(function() {
                     alert('<s:property value="message" />');
                 });
             </script>
+        </s:if>-->
+
+        <!-- Message Box -->
+        <s:if test="%{message != null}">
+             <%@include file="./message-box.jsp" %>
         </s:if>
+
 
         <main class="form-section">
 
